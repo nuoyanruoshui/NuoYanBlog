@@ -80,22 +80,19 @@ function getStatusInfo(status: string) {
 		case "watching":
 			return {
 				text: i18n(I18nKey.animeStatusWatching),
-				class:
-					"bg-[var(--accent-green-bg)] text-[var(--accent-green)]",
+				class: "bg-[var(--accent-green-bg)] text-[var(--accent-green)]",
 				icon: "▶",
 			};
 		case "completed":
 			return {
 				text: i18n(I18nKey.animeStatusCompleted),
-				class:
-					"bg-[var(--accent-blue-bg)] text-[var(--accent-blue)]",
+				class: "bg-[var(--accent-blue-bg)] text-[var(--accent-blue)]",
 				icon: "✓",
 			};
 		case "planned":
 			return {
 				text: i18n(I18nKey.animeStatusPlanned),
-				class:
-					"bg-[var(--accent-amber-bg)] text-[var(--accent-amber)]",
+				class: "bg-[var(--accent-amber-bg)] text-[var(--accent-amber)]",
 				icon: "⏰",
 			};
 		default:
