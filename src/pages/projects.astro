@@ -8,6 +8,7 @@ import {
 	getProjectsByCategory,
 	projectsData,
 } from "../data/projects";
+import PageHeader from "../components/PageHeader.astro";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -58,45 +59,37 @@ const getCategoryText = (category: string) => {
 <MainGridLayout title={title} description={subtitle}>
   <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
     <div class="card-base z-10 px-9 py-6 relative w-full">
-      <!-- 页面标题 -->
-      <div class="flex flex-col items-start justify-center mb-8">
-        <h1 class="text-4xl font-bold text-black/90 dark:text-white/90 mb-2">
-          {i18n(I18nKey.projects)}
-        </h1>
-        <p class="text-lg text-black/60 dark:text-white/60">
-          {i18n(I18nKey.projectsSubtitle)}
-        </p>
-      </div>
+      <PageHeader title={i18n(I18nKey.projects)} subtitle={i18n(I18nKey.projectsSubtitle)} />
 
       <!-- 统计信息 -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4">
-          <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.total}</div>
-          <div class="text-sm text-blue-600/70 dark:text-blue-400/70">{i18n(I18nKey.projectsTotal)}</div>
+        <div class="bg-[var(--accent-blue-bg)] rounded-lg p-4">
+          <div class="text-2xl font-bold text-[var(--accent-blue)]">{stats.total}</div>
+          <div class="text-sm text-[var(--accent-blue)] opacity-70">{i18n(I18nKey.projectsTotal)}</div>
         </div>
-        <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4">
-          <div class="text-2xl font-bold text-green-600 dark:text-green-400">{stats.byStatus.completed}</div>
-          <div class="text-sm text-green-600/70 dark:text-green-400/70">{i18n(I18nKey.projectsCompleted)}</div>
+        <div class="bg-[var(--accent-green-bg)] rounded-lg p-4">
+          <div class="text-2xl font-bold text-[var(--accent-green)]">{stats.byStatus.completed}</div>
+          <div class="text-sm text-[var(--accent-green)] opacity-70">{i18n(I18nKey.projectsCompleted)}</div>
         </div>
-        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 rounded-lg p-4">
-          <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{stats.byStatus.inProgress}</div>
-          <div class="text-sm text-yellow-600/70 dark:text-yellow-400/70">{i18n(I18nKey.projectsInProgress)}</div>
+        <div class="bg-[var(--accent-amber-bg)] rounded-lg p-4">
+          <div class="text-2xl font-bold text-[var(--accent-amber)]">{stats.byStatus.inProgress}</div>
+          <div class="text-sm text-[var(--accent-amber)] opacity-70">{i18n(I18nKey.projectsInProgress)}</div>
         </div>
-        <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-4">
-          <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{allTechStack.length}</div>
-          <div class="text-sm text-purple-600/70 dark:text-purple-400/70">{i18n(I18nKey.projectsTechStack)}</div>
+        <div class="bg-[var(--accent-purple-bg)] rounded-lg p-4">
+          <div class="text-2xl font-bold text-[var(--accent-purple)]">{allTechStack.length}</div>
+          <div class="text-sm text-[var(--accent-purple)] opacity-70">{i18n(I18nKey.projectsTechStack)}</div>
         </div>
       </div>
 
       <!-- 特色项目 -->
       {featuredProjects.length > 0 && (
         <div class="mb-8">
-          <h2 class="text-2xl font-bold text-black/90 dark:text-white/90 mb-4">
+          <h2 class="text-2xl font-bold text-90 mb-4">
             {i18n(I18nKey.projectsFeatured)}
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {featuredProjects.map((project) => (
-              <div class="bg-white dark:bg-gray-800 rounded-lg border border-black/10 dark:border-white/10 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+              <div class="bg-[var(--card-bg)] rounded-lg border border-[var(--line-divider)] overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 {project.image && (
                   <div class="aspect-video overflow-hidden">
                     <img 
@@ -108,32 +101,32 @@ const getCategoryText = (category: string) => {
                 )}
                 <div class="p-6">
                   <div class="flex items-start justify-between mb-3">
-                    <h3 class="text-xl font-semibold text-black/90 dark:text-white/90">
+                    <h3 class="text-xl font-semibold text-90">
                       {project.title}
                     </h3>
                     <span class={`px-2 py-1 text-xs rounded-full ${
                       project.status === 'completed' 
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                        ? 'bg-[var(--accent-green-bg)] text-[var(--accent-green)]'
                         : project.status === 'in-progress'
-                        ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                        : 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
+                        ? 'bg-[var(--accent-amber-bg)] text-[var(--accent-amber)]'
+                        : 'bg-[var(--card-bg-alt)] text-75'
                     }`}>
                       {i18n(project.status === 'completed' ? I18nKey.projectsCompleted : 
                             project.status === 'in-progress' ? I18nKey.projectsInProgress : 
                             I18nKey.projectsPlanned)}
                     </span>
                   </div>
-                  <p class="text-black/60 dark:text-white/60 mb-4 line-clamp-2">
+                  <p class="text-75 mb-4 line-clamp-2">
                     {project.description}
                   </p>
                   <div class="flex flex-wrap gap-2 mb-4">
                     {project.techStack.slice(0, 4).map((tech) => (
-                      <span class="px-2 py-1 text-xs bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded">
+                      <span class="px-2 py-1 text-xs bg-[var(--accent-blue-bg)] text-[var(--accent-blue)] rounded">
                         {tech}
                       </span>
                     ))}
                     {project.techStack.length > 4 && (
-                      <span class="px-2 py-1 text-xs bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400 rounded">
+                      <span class="px-2 py-1 text-xs bg-[var(--card-bg-alt)] text-75 rounded">
                         +{project.techStack.length - 4}
                       </span>
                     )}
@@ -144,7 +137,7 @@ const getCategoryText = (category: string) => {
                         href={project.demoUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        class="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
+                        class="text-[var(--accent-blue)] hover:underline text-sm font-medium"
                       >
                         {i18n(I18nKey.projectsDemo)}
                       </a>
@@ -154,7 +147,7 @@ const getCategoryText = (category: string) => {
                         href={project.sourceUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        class="text-gray-600 dark:text-gray-400 hover:underline text-sm font-medium"
+                        class="text-50 hover:underline text-sm font-medium"
                       >
                         {i18n(I18nKey.projectsSource)}
                       </a>
@@ -175,15 +168,15 @@ const getCategoryText = (category: string) => {
           
           return (
             <div>
-              <h2 class="text-2xl font-bold text-black/90 dark:text-white/90 mb-4">
+              <h2 class="text-2xl font-bold text-90 mb-4">
                 {getCategoryText(category)}
-                <span class="text-lg font-normal text-black/60 dark:text-white/60 ml-2">
+                <span class="text-lg font-normal text-50 ml-2">
                   ({categoryProjects.length})
                 </span>
               </h2>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {categoryProjects.map((project) => (
-                  <div class="bg-white dark:bg-gray-800 rounded-lg border border-black/10 dark:border-white/10 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                  <div class="bg-[var(--card-bg)] rounded-lg border border-[var(--line-divider)] overflow-hidden hover:shadow-lg transition-shadow duration-300">
                     {project.image && (
                       <div class="aspect-video overflow-hidden">
                         <img 
@@ -195,32 +188,32 @@ const getCategoryText = (category: string) => {
                     )}
                     <div class="p-4">
                       <div class="flex items-start justify-between mb-2">
-                        <h3 class="text-lg font-semibold text-black/90 dark:text-white/90 line-clamp-1">
+                        <h3 class="text-lg font-semibold text-90 line-clamp-1">
                           {project.title}
                         </h3>
                         <span class={`px-2 py-1 text-xs rounded-full shrink-0 ml-2 ${
                           project.status === 'completed' 
-                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                            ? 'bg-[var(--accent-green-bg)] text-[var(--accent-green)]'
                             : project.status === 'in-progress'
-                            ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                            : 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
+                            ? 'bg-[var(--accent-amber-bg)] text-[var(--accent-amber)]'
+                            : 'bg-[var(--card-bg-alt)] text-75'
                         }`}>
                           {i18n(project.status === 'completed' ? I18nKey.projectsCompleted : 
                                 project.status === 'in-progress' ? I18nKey.projectsInProgress : 
                                 I18nKey.projectsPlanned)}
                         </span>
                       </div>
-                      <p class="text-black/60 dark:text-white/60 mb-3 text-sm line-clamp-2">
+                      <p class="text-75 mb-3 text-sm line-clamp-2">
                         {project.description}
                       </p>
                       <div class="flex flex-wrap gap-1 mb-3">
                         {project.techStack.slice(0, 3).map((tech) => (
-                          <span class="px-2 py-1 text-xs bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded">
+                          <span class="px-2 py-1 text-xs bg-[var(--accent-blue-bg)] text-[var(--accent-blue)] rounded">
                             {tech}
                           </span>
                         ))}
                         {project.techStack.length > 3 && (
-                          <span class="px-2 py-1 text-xs bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400 rounded">
+                          <span class="px-2 py-1 text-xs bg-[var(--card-bg-alt)] text-75 rounded">
                             +{project.techStack.length - 3}
                           </span>
                         )}
@@ -231,7 +224,7 @@ const getCategoryText = (category: string) => {
                             href={project.demoUrl} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            class="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                            class="text-[var(--accent-blue)] hover:underline font-medium"
                           >
                             {i18n(I18nKey.projectsDemo)}
                           </a>
@@ -241,7 +234,7 @@ const getCategoryText = (category: string) => {
                             href={project.sourceUrl} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            class="text-gray-600 dark:text-gray-400 hover:underline font-medium"
+                            class="text-50 hover:underline font-medium"
                           >
                             {i18n(I18nKey.projectsSource)}
                           </a>
@@ -257,13 +250,13 @@ const getCategoryText = (category: string) => {
       </div>
 
       <!-- 技术栈统计 -->
-      <div class="mt-12 pt-8 border-t border-black/10 dark:border-white/10">
-        <h2 class="text-2xl font-bold text-black/90 dark:text-white/90 mb-4">
+      <div class="mt-12 pt-8 border-t border-[var(--line-divider)]">
+        <h2 class="text-2xl font-bold text-90 mb-4">
           {i18n(I18nKey.projectsTechStack)}
         </h2>
         <div class="flex flex-wrap gap-2">
           {allTechStack.map((tech) => (
-            <span class="px-3 py-1 text-sm bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-full">
+            <span class="px-3 py-1 text-sm bg-[var(--card-bg-alt)] text-75 rounded-full">
               {tech}
             </span>
           ))}

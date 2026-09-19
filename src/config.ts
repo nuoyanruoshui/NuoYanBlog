@@ -136,7 +136,9 @@ export const siteConfig: SiteConfig = {
 	},
 };
 export const fullscreenWallpaperConfig: FullscreenWallpaperConfig = {
-	enable: true, // 启用全屏壁纸功能,非Banner模式下生效
+	// 已改用主题色渐变背景（见 src/styles/main.css 的 html 规则）。
+	// 想换回全屏壁纸只需把这里设为 true，卡片会自动切换成半透明磨砂样式。
+	enable: false, // 启用全屏壁纸功能,非Banner模式下生效
 	src: {
 		desktop: [
 			"/assets/desktop-banner/d1.webp",

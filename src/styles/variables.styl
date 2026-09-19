@@ -9,8 +9,12 @@ rainbow-light = linear-gradient(to right, oklch(0.80 0.10 0), oklch(0.80 0.10 30
 rainbow-dark = linear-gradient(to right, oklch(0.70 0.10 0), oklch(0.70 0.10 30), oklch(0.70 0.10 60), oklch(0.70 0.10 90), oklch(0.70 0.10 120), oklch(0.70 0.10 150), oklch(0.70 0.10 180), oklch(0.70 0.10 210), oklch(0.70 0.10 240), oklch(0.70 0.10 270), oklch(0.70 0.10 300), oklch(0.70 0.10 330), oklch(0.70 0.10 360))
 
 :root
-  --radius-large 1rem
+  --radius-large 1.25rem
+  --radius-small 0.6rem
   --content-delay 150ms
+  /* 统一的缓动曲线：柔和收尾，避免默认 ease 的廉价感 */
+  --ease-soft cubic-bezier(0.32, 0.72, 0, 1)
+  --ease-out-soft cubic-bezier(0.22, 1, 0.36, 1)
 
 /* An util to define variables that vary with light and dark mode */
 define(vars)
@@ -26,9 +30,14 @@ define({
   --primary: oklch(0.70 0.14 var(--hue)) oklch(0.75 0.14 var(--hue))
   --primary-subtle: unquote("oklch(0.70 0.14 var(--hue) / 0.15)") unquote("oklch(0.75 0.14 var(--hue) / 0.15)")
   --page-bg: oklch(0.95 0.01 var(--hue)) oklch(0.16 0.014 var(--hue))
-  --card-bg: white oklch(0.23 0.015 var(--hue))
+  --card-bg: unquote("oklch(1 0 0 / 0.94)") unquote("oklch(0.22 0.016 var(--hue) / 0.94)")
   --card-bg-alt: oklch(0.98 0.005 var(--hue)) oklch(0.26 0.018 var(--hue))
-  --card-bg-transparent: rgba(255, 255, 255, 0.8) rgba(23, 23, 23, 0.8)
+  --card-bg-transparent: rgba(255, 255, 255, 0.72) rgba(26, 26, 28, 0.72)
+
+  /* 阴影体系：分层柔和投影 + 1px 内描边。全屏壁纸下描边保证卡片边界清晰，悬浮时描边过渡为主题色 */
+  --shadow-card: unquote("0 1px 2px oklch(0 0 0 / 0.04), 0 4px 12px -2px oklch(0 0 0 / 0.06), inset 0 0 0 1px oklch(0 0 0 / 0.045)") unquote("0 1px 2px oklch(0 0 0 / 0.30), 0 4px 12px -2px oklch(0 0 0 / 0.35), inset 0 0 0 1px oklch(1 0 0 / 0.07)")
+  --shadow-card-hover: unquote("0 2px 6px oklch(0 0 0 / 0.06), 0 14px 32px -8px oklch(0 0 0 / 0.14), inset 0 0 0 1px oklch(0.70 0.14 var(--hue) / 0.22)") unquote("0 2px 6px oklch(0 0 0 / 0.40), 0 14px 32px -8px oklch(0 0 0 / 0.55), inset 0 0 0 1px oklch(0.75 0.14 var(--hue) / 0.35)")
+  --shadow-float: unquote("0 4px 12px oklch(0 0 0 / 0.08), 0 16px 40px -12px oklch(0 0 0 / 0.18), inset 0 0 0 1px oklch(0 0 0 / 0.05)") unquote("0 4px 12px oklch(0 0 0 / 0.40), 0 16px 40px -12px oklch(0 0 0 / 0.60), inset 0 0 0 1px oklch(1 0 0 / 0.08)")
 
   --btn-content: oklch(0.55 0.12 var(--hue)) oklch(0.75 0.1 var(--hue))
 
@@ -87,6 +96,27 @@ define({
 
   --display-light-icon: 1 0
   --display-dark-icon: 0 1
+
+  /* 语义强调色。
+     项目/技能/时间线页原先直接写死 text-blue-600 / from-green-50 这类调色板颜色，
+     既不跟随主题色、在深色模式下也偏脏。这里给出一套明度彩度统一的替代：
+     --accent-X 用于文字，--accent-X-bg 用于浅色底块。 */
+  --accent-blue: oklch(0.55 0.16 250) oklch(0.78 0.12 250)
+  --accent-blue-bg: oklch(0.96 0.025 250) oklch(0.29 0.045 250)
+  --accent-green: oklch(0.55 0.14 155) oklch(0.80 0.13 155)
+  --accent-green-bg: oklch(0.96 0.025 155) oklch(0.29 0.045 155)
+  --accent-amber: oklch(0.60 0.13 75) oklch(0.83 0.12 75)
+  --accent-amber-bg: oklch(0.96 0.030 75) oklch(0.30 0.045 75)
+  --accent-orange: oklch(0.60 0.15 55) oklch(0.81 0.13 55)
+  --accent-orange-bg: oklch(0.96 0.030 55) oklch(0.30 0.045 55)
+  --accent-red: oklch(0.55 0.18 25) oklch(0.75 0.14 25)
+  --accent-red-bg: oklch(0.96 0.025 25) oklch(0.30 0.050 25)
+  --accent-purple: oklch(0.55 0.17 300) oklch(0.78 0.13 300)
+  --accent-purple-bg: oklch(0.96 0.025 300) oklch(0.30 0.050 300)
+  --accent-indigo: oklch(0.52 0.17 275) oklch(0.77 0.13 275)
+  --accent-indigo-bg: oklch(0.96 0.025 275) oklch(0.29 0.050 275)
+  --accent-teal: oklch(0.56 0.11 195) oklch(0.80 0.11 195)
+  --accent-teal-bg: oklch(0.96 0.025 195) oklch(0.29 0.045 195)
 
   --admonitions-color-tip: oklch(0.7 0.14 180) oklch(0.75 0.14 180)
   --admonitions-color-note: oklch(0.7 0.14 250) oklch(0.75 0.14 250)

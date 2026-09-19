@@ -33,43 +33,73 @@ html {
     scroll-behavior: smooth;
 }
 
+/*
+ * 页面背景：主题色网格渐变。
+ * 写在 html 上，背景会传播到 canvas，因此无论内容多长都铺满整个视口，
+ * 不会出现"内容到底部后露出空白"的问题。跟随 --hue 自动变色。
+ */
+:root {
+    --page-bg-gradient:
+        radial-gradient(ellipse 70% 55% at 12% -8%, oklch(0.88 0.075 var(--hue) / 0.55), transparent 62%),
+        radial-gradient(ellipse 60% 45% at 96% -4%, oklch(0.86 0.09 calc(var(--hue) + 50) / 0.42), transparent 58%),
+        radial-gradient(ellipse 90% 60% at 50% 106%, oklch(0.90 0.055 calc(var(--hue) + 25) / 0.40), transparent 62%);
+}
+
+:root.dark {
+    --page-bg-gradient:
+        radial-gradient(ellipse 70% 55% at 12% -8%, oklch(0.42 0.09 var(--hue) / 0.45), transparent 62%),
+        radial-gradient(ellipse 60% 45% at 96% -4%, oklch(0.38 0.10 calc(var(--hue) + 50) / 0.35), transparent 58%),
+        radial-gradient(ellipse 90% 60% at 50% 106%, oklch(0.34 0.07 calc(var(--hue) + 25) / 0.38), transparent 62%);
+}
+
+/*
+ * 无 Banner 模式下的粘性页脚。
+ * 主内容容器是绝对定位的，若内容不足一屏，页脚会停在半空、下方留出大片空白。
+ * 这里让网格撑满可用高度、main 拉伸，并把页脚推到底部。
+ */
+.no-banner-layout #main-grid {
+    min-height: calc(100vh - 5.5rem - 1.5rem);
+}
+
+.no-banner-layout main#swup-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.no-banner-layout #content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.no-banner-layout .footer {
+    margin-top: auto;
+}
+
+@media (min-width: 1024px) {
+    /* 桌面端网格模板只有一行，需要显式给 1fr 才会跟着容器撑高 */
+    .no-banner-layout #main-grid {
+        grid-template-rows: minmax(0, 1fr);
+        /* 侧边栏保持内容高度，不要跟着主内容一起被拉伸 */
+        align-items: start;
+    }
+
+    .no-banner-layout main#swup-container {
+        align-self: stretch;
+    }
+}
+
+html {
+    background-image: var(--page-bg-gradient);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
 /* 当启用 ZenMaruGothic-Medium 字体时应用为全局字体 */
 .zen-maru-gothic-enabled {
   font-family: 'ZenMaruGothic-Medium', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-
-/* 页面顶部渐变高光效果 - 柔和玻璃质感 */
-.top-gradient-highlight {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 200px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.25) 40%, transparent 100%);
-    pointer-events: none;
-    z-index: 20;
-    transition: opacity 0.3s ease;
-}
-
-/* 暗色主题下的渐变高光效果 */
-:root.dark .top-gradient-highlight {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 40%, transparent 100%);
-}
-
-/* 页面底部阴影 - 增加页面深度 */
-.page-bottom-shadow {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.03) 0%, transparent 100%);
-    pointer-events: none;
-    z-index: 1;
-}
-
-:root.dark .page-bottom-shadow {
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.15) 0%, transparent 100%);
 }
 
 @layer components {
@@ -137,33 +167,47 @@ html {
     }
     
     .card-base {
-        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition-all duration-200;
-        box-shadow: 0 1px 3px oklch(0 0 0 / 0.04), 0 1px 2px oklch(0 0 0 / 0.06);
+        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)];
+        box-shadow: var(--shadow-card);
+        /* 只过渡真正会变化的属性，避免 transition-all 造成的整树重绘 */
+        transition: box-shadow 0.35s var(--ease-soft),
+                    transform 0.35s var(--ease-soft),
+                    background-color 0.2s ease;
     }
 
     .card-base:hover {
-        box-shadow: 0 4px 12px oklch(0 0 0 / 0.08), 0 2px 4px oklch(0 0 0 / 0.06);
+        box-shadow: var(--shadow-card-hover);
     }
 
     .card-base-transparent {
-        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg-transparent)] backdrop-blur-sm transition-all duration-200;
+        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg-transparent)] backdrop-blur-md transition-all duration-200;
     }
-    
-    /* 全屏壁纸模式下的半透明效果 */
+
+    /* 全屏壁纸模式下的半透明效果：提高模糊与饱和度，做出磨砂玻璃质感 */
     .wallpaper-transparent .card-base {
-        @apply bg-[var(--card-bg-transparent)] backdrop-blur-sm;
+        @apply bg-[var(--card-bg-transparent)];
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        box-shadow: var(--shadow-card);
     }
-    
+
     .wallpaper-transparent .float-panel {
-        @apply bg-[var(--card-bg-transparent)] backdrop-blur-sm;
+        @apply bg-[var(--card-bg-transparent)];
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
     }
-    
+
     .wallpaper-transparent #navbar > div {
-    @apply bg-[var(--card-bg-transparent)] backdrop-blur-sm;
-}
-    
+        @apply bg-[var(--card-bg-transparent)];
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        box-shadow: var(--shadow-card);
+    }
+
     .wallpaper-transparent .btn-card {
-        @apply bg-[var(--card-bg-transparent)] backdrop-blur-sm;
+        @apply bg-[var(--card-bg-transparent)];
+        backdrop-filter: blur(8px) saturate(160%);
+        -webkit-backdrop-filter: blur(8px) saturate(160%);
     }
     
     .wallpaper-transparent ~ * .music-player .mini-player,
@@ -192,7 +236,8 @@ html {
         @apply transition-colors duration-150 rounded-md p-1.5 -m-1.5 expand-animation;
     }
     .float-panel {
-        @apply top-[5.25rem] rounded-[var(--radius-large)] overflow-hidden bg-[var(--float-panel-bg)] transition-colors duration-150 shadow-xl dark:shadow-none
+        @apply top-[5.25rem] rounded-[var(--radius-large)] overflow-hidden bg-[var(--float-panel-bg)] transition-colors duration-150;
+        box-shadow: var(--shadow-float);
     }
     .float-panel-closed {
         @apply -translate-y-1 opacity-0 pointer-events-none
@@ -330,7 +375,7 @@ html {
     }
 
     .meta-icon {
-        @apply w-8 h-8 transition-colors duration-150 rounded-md flex items-center justify-center bg-[var(--btn-regular-bg)]
+        @apply w-8 h-8 transition-colors duration-150 rounded-[var(--radius-small)] flex items-center justify-center bg-[var(--btn-regular-bg)]
         text-[var(--btn-content)] mr-2
     }
     .with-divider {
@@ -354,6 +399,17 @@ html {
 
 ::selection {
     background-color: var(--selection-bg)
+}
+
+/* 键盘导航的可见焦点环。使用 :where() 保持零特异性，不覆盖组件自身的 outline-none */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* 壁纸模式下卡片使用磨砂玻璃时不叠加噪点式的生硬描边 */
+.wallpaper-transparent .card-base:hover {
+    box-shadow: var(--shadow-card-hover);
 }
 
 .dash-line {

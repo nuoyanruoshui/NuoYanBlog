@@ -5,6 +5,8 @@ interface Props {
 	id?: string;
 	src: string;
 	class?: string;
+	/** 附加到 <img> 自身的类名，用于悬停缩放等交互 */
+	imgClass?: string;
 	alt?: string;
 	position?: string;
 	basePath?: string;
@@ -15,6 +17,7 @@ import { url } from "../../utils/url-utils";
 
 const { id, src, alt, position = "center", basePath = "/" } = Astro.props;
 const className = Astro.props.class;
+const imgClassName = Astro.props.imgClass ?? "";
 
 const isLocal = !(
 	src.startsWith("/") ||
@@ -44,7 +47,7 @@ if (isLocal) {
 	img = await file();
 }
 
-const imageClass = "w-full h-full object-cover";
+const imageClass = `w-full h-full object-cover ${imgClassName}`.trim();
 const imageStyle = `object-position: ${position}`;
 ---
 <div id={id} class:list={[className, 'overflow-hidden relative']}>

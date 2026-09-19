@@ -1,0 +1,19 @@
+---
+/**
+ * 全站统一的页面标题。
+ * 以前各页面各写各的（text-xl ~ text-4xl 都有），这里收敛成一套。
+ */
+interface Props {
+	title: string;
+	subtitle?: string;
+	class?: string;
+}
+
+const { title, subtitle } = Astro.props;
+const className = Astro.props.class;
+---
+
+<header class:list={["flex flex-col gap-1.5 mb-8", className]}>
+    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-90">{title}</h1>
+    {subtitle && <p class="text-base md:text-lg text-50">{subtitle}</p>}
+</header>

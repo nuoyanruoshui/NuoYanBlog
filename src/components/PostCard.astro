@@ -47,10 +47,10 @@ const { remarkPluginFrontmatter } = await entry.render();
 <div class:list={["card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative transition-all duration-200 hover:-translate-y-0.5", className]} style={style}>
     <div class:list={["pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative", {"w-full md:w-[calc(100%_-_52px_-_12px)]": !hasCover, "w-full md:w-[calc(100%_-_var(--coverWidth)_-_12px)]": hasCover}]}>
         <a href={url}
-           class="transition group w-full block font-bold mb-3 text-3xl text-90
+           class="transition-colors duration-200 group w-full block font-bold mb-3 text-2xl md:text-[1.625rem] md:leading-[1.3] tracking-tight text-90
         hover:text-[var(--primary)] dark:hover:text-[var(--primary)]
         active:text-[var(--title-active)] dark:active:text-[var(--title-active)]
-        before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+        before:w-1 before:h-5 before:rounded-full before:bg-[var(--primary)]
         before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block
         ">
             {pinned && <Icon name="mdi:pin" class="inline text-[var(--primary)] text-2xl mr-2 -translate-y-0.5"></Icon>}
@@ -63,7 +63,7 @@ const { remarkPluginFrontmatter } = await entry.render();
         <PostMetadata published={published} updated={updated} tags={tags} category={category} hideTagsForMobile={true} hideUpdateDate={true} class="mb-4"></PostMetadata>
 
         <!-- description -->
-        <div class:list={["transition text-75 mb-3.5 pr-4", {"line-clamp-2 md:line-clamp-1": !description}]}>
+        <div class:list={["transition text-75 mb-3.5 pr-4 leading-relaxed text-[0.95rem]", {"line-clamp-2 md:line-clamp-1": !description}]}>
             { description || remarkPluginFrontmatter.excerpt }
         </div>
 
@@ -83,16 +83,21 @@ const { remarkPluginFrontmatter } = await entry.render();
     {hasCover && <a href={url} aria-label={title}
                     class:list={["group",
                         "max-h-[20vh] md:max-h-none mx-4 mt-4 -mb-2 md:mb-0 md:mx-0 md:mt-0",
-                        "md:w-[var(--coverWidth)] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95"
+                        "md:w-[var(--coverWidth)] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-[calc(var(--radius-large)-0.4rem)] overflow-hidden active:scale-[0.98]",
+                        "ring-1 ring-black/[0.06] dark:ring-white/10"
                     ]} >
-        <div class="absolute pointer-events-none z-10 w-full h-full group-hover:bg-black/30 group-active:bg-black/50 transition"></div>
+        <!-- 常驻的底部渐变暗角，让封面更有层次 -->
+        <div class="absolute pointer-events-none z-10 w-full h-full bg-gradient-to-t from-black/35 via-black/5 to-transparent transition-opacity duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:opacity-0"></div>
+        <!-- 悬停时的压暗遮罩，提升箭头图标的对比度 -->
+        <div class="absolute pointer-events-none z-10 w-full h-full bg-black/0 group-hover:bg-black/35 group-active:bg-black/50 transition-colors duration-300"></div>
         <div class="absolute pointer-events-none z-20 w-full h-full flex items-center justify-center ">
             <Icon name="material-symbols:chevron-right-rounded"
-                  class="transition opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 text-white text-5xl">
+                  class="transition duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 text-white text-5xl drop-shadow-lg">
             </Icon>
         </div>
         <ImageWrapper src={image} basePath={path.join("content/posts/", getDir(entry.id))} alt="Cover Image of the Post"
-                  class="w-full h-full">
+                  class="w-full h-full"
+                  imgClass="transition-transform duration-[700ms] ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.07]">
         </ImageWrapper>
     </a>}
 

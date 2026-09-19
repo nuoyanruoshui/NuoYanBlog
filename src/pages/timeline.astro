@@ -9,6 +9,7 @@ import {
 	getTotalWorkExperience,
 	timelineData,
 } from "../data/timeline";
+import PageHeader from "../components/PageHeader.astro";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -78,63 +79,55 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
   <IconifyLoader preloadIcons={allIcons} />
   <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
     <div class="card-base z-10 px-9 py-6 relative w-full">
-      <!-- 页面标题 -->
-      <div class="flex flex-col items-start justify-center mb-8">
-        <h1 class="text-4xl font-bold text-black/90 dark:text-white/90 mb-2">
-          {i18n(I18nKey.timeline)}
-        </h1>
-        <p class="text-lg text-black/60 dark:text-white/60">
-          {i18n(I18nKey.timelineSubtitle)}
-        </p>
-      </div>
+      <PageHeader title={i18n(I18nKey.timeline)} subtitle={i18n(I18nKey.timelineSubtitle)} />
 
       <!-- 统计信息 -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4">
-          <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.total}</div>
-          <div class="text-sm text-blue-600/70 dark:text-blue-400/70">{i18n(I18nKey.timelineTotal)}</div>
+        <div class="bg-[var(--accent-blue-bg)] rounded-lg p-4">
+          <div class="text-2xl font-bold text-[var(--accent-blue)]">{stats.total}</div>
+          <div class="text-sm text-[var(--accent-blue)] opacity-70">{i18n(I18nKey.timelineTotal)}</div>
         </div>
-        <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4">
-          <div class="text-2xl font-bold text-green-600 dark:text-green-400">{stats.byType.work}</div>
-          <div class="text-sm text-green-600/70 dark:text-green-400/70">{i18n(I18nKey.timelineWork)}</div>
+        <div class="bg-[var(--accent-green-bg)] rounded-lg p-4">
+          <div class="text-2xl font-bold text-[var(--accent-green)]">{stats.byType.work}</div>
+          <div class="text-sm text-[var(--accent-green)] opacity-70">{i18n(I18nKey.timelineWork)}</div>
         </div>
-        <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-4">
-          <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.byType.project}</div>
-          <div class="text-sm text-purple-600/70 dark:text-purple-400/70">{i18n(I18nKey.timelineProjects)}</div>
+        <div class="bg-[var(--accent-purple-bg)] rounded-lg p-4">
+          <div class="text-2xl font-bold text-[var(--accent-purple)]">{stats.byType.project}</div>
+          <div class="text-sm text-[var(--accent-purple)] opacity-70">{i18n(I18nKey.timelineProjects)}</div>
         </div>
-        <div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-lg p-4">
-          <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">
+        <div class="bg-[var(--accent-orange-bg)] rounded-lg p-4">
+          <div class="text-2xl font-bold text-[var(--accent-orange)]">
             {workExperience.years}+
           </div>
-          <div class="text-sm text-orange-600/70 dark:text-orange-400/70">{i18n(I18nKey.timelineExperience)}</div>
+          <div class="text-sm text-[var(--accent-orange)] opacity-70">{i18n(I18nKey.timelineExperience)}</div>
         </div>
       </div>
 
       <!-- 当前进行中的项目 -->
       {currentItems.length > 0 && (
         <div class="mb-8">
-          <h2 class="text-2xl font-bold text-black/90 dark:text-white/90 mb-4">
+          <h2 class="text-2xl font-bold text-90 mb-4">
             {i18n(I18nKey.timelineCurrent)}
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {currentItems.map((item) => (
-              <div class="bg-white dark:bg-gray-800 rounded-lg border border-black/10 dark:border-white/10 p-6 hover:shadow-lg transition-shadow duration-300">
+              <div class="bg-[var(--card-bg)] rounded-lg border border-[var(--line-divider)] p-6 hover:shadow-lg transition-shadow duration-300">
                 <div class="flex items-start gap-4">
-                  <div class="w-12 h-12 rounded-lg flex items-center justify-center" style={`background-color: ${item.color || 'rgb(99 102 241)'}20`}>
+                  <div class="w-12 h-12 rounded-lg flex items-center justify-center" style={`background-color: ${item.color || 'var(--primary)'}20`}>
                     <Icon 
                       icon={item.icon || getTypeIcon(item.type)} 
                       class="text-2xl" 
-                      color={item.color || 'rgb(99 102 241)'}
+                      color={item.color || 'var(--primary)'}
                       fallback={item.title.charAt(0)}
                       loading="eager"
                     />
                   </div>
                   <div class="flex-1">
                     <div class="flex items-start justify-between mb-2">
-                      <h3 class="text-xl font-semibold text-black/90 dark:text-white/90">
+                      <h3 class="text-xl font-semibold text-90">
                         {item.title}
                       </h3>
-                      <span class="px-2 py-1 text-xs bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full">
+                      <span class="px-2 py-1 text-xs bg-[var(--accent-green-bg)] text-[var(--accent-green)] rounded-full">
                         {i18n(I18nKey.timelineCurrent)}
                       </span>
                     </div>
@@ -157,7 +150,7 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
                     {item.skills && item.skills.length > 0 && (
                       <div class="flex flex-wrap gap-1 mb-3">
                         {item.skills.map((skill) => (
-                          <span class="px-2 py-1 text-xs bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 rounded">
+                          <span class="px-2 py-1 text-xs bg-[var(--accent-indigo-bg)] text-[var(--accent-indigo)] rounded">
                             {skill}
                           </span>
                         ))}
@@ -170,7 +163,7 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
                             href={link.url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            class="text-indigo-600 dark:text-indigo-400 hover:underline text-sm font-medium"
+                            class="text-[var(--accent-indigo)] hover:underline text-sm font-medium"
                           >
                             {link.name}
                           </a>
@@ -187,18 +180,18 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
 
       <!-- 时间线 -->
       <div class="mb-8">
-        <h2 class="text-2xl font-bold text-black/90 dark:text-white/90 mb-6">
+        <h2 class="text-2xl font-bold text-90 mb-6">
           {i18n(I18nKey.timelineHistory)}
         </h2>
         <div class="relative">
           <!-- 时间线主轴 -->
-          <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+          <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-[var(--line-divider)]"></div>
           
           <div class="space-y-8">
             {allTimelineItems.map((item, index) => (
               <div class="relative flex items-start gap-6">
                 <!-- 时间线节点 -->
-                <div class="relative z-10 w-12 h-12 rounded-full flex items-center justify-center" style={`background-color: ${item.color || 'rgb(99 102 241)'}`}>
+                <div class="relative z-10 w-12 h-12 rounded-full flex items-center justify-center" style={`background-color: ${item.color || 'var(--primary)'}`}>
                   <Icon 
                     icon={item.icon || getTypeIcon(item.type)} 
                     class="text-xl text-white" 
@@ -209,10 +202,10 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
                 </div>
                 
                 <!-- 内容卡片 -->
-                <div class="flex-1 bg-white dark:bg-gray-800 rounded-lg border border-black/10 dark:border-white/10 p-6 hover:shadow-lg transition-shadow duration-300">
+                <div class="flex-1 bg-[var(--card-bg)] rounded-lg border border-[var(--line-divider)] p-6 hover:shadow-lg transition-shadow duration-300">
                   <div class="flex items-start justify-between mb-3">
                     <div>
-                      <h3 class="text-xl font-semibold text-black/90 dark:text-white/90 mb-1">
+                      <h3 class="text-xl font-semibold text-90 mb-1">
                         {item.title}
                       </h3>
                       {item.organization && (
@@ -222,10 +215,10 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
                       )}
                     </div>
                     <span class={`px-2 py-1 text-xs rounded-full ${
-                      item.type === 'education' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
-                      item.type === 'work' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                      item.type === 'project' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' :
-                      'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
+                      item.type === 'education' ? 'bg-[var(--accent-blue-bg)] text-[var(--accent-blue)]' :
+                      item.type === 'work' ? 'bg-[var(--accent-green-bg)] text-[var(--accent-green)]' :
+                      item.type === 'project' ? 'bg-[var(--accent-purple-bg)] text-[var(--accent-purple)]' :
+                      'bg-[var(--accent-orange-bg)] text-[var(--accent-orange)]'
                     }`}>
                       {i18n(item.type === 'education' ? I18nKey.timelineEducation :
                             item.type === 'work' ? I18nKey.timelineWork :
@@ -260,7 +253,7 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
                       <ul class="space-y-1">
                         {item.achievements.map((achievement) => (
                           <li class="text-sm text-black/70 dark:text-white/70 flex items-start gap-2">
-                            <span class="text-green-500 mt-1">•</span>
+                            <span class="text-[var(--accent-green)] mt-1">•</span>
                             <span>{achievement}</span>
                           </li>
                         ))}
@@ -272,7 +265,7 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
                     <div class="mb-4">
                       <div class="flex flex-wrap gap-1">
                         {item.skills.map((skill) => (
-                          <span class="px-2 py-1 text-xs bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 rounded">
+                          <span class="px-2 py-1 text-xs bg-[var(--card-bg-alt)] text-75 rounded">
                             {skill}
                           </span>
                         ))}
@@ -287,7 +280,7 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
                           href={link.url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          class="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium flex items-center gap-1"
+                          class="text-[var(--accent-blue)] hover:underline text-sm font-medium flex items-center gap-1"
                         >
                           {link.type === 'certificate' && '🏆'}
                           {link.type === 'project' && '🔗'}
@@ -305,8 +298,8 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
       </div>
 
       <!-- 类型统计 -->
-      <div class="mt-12 pt-8 border-t border-black/10 dark:border-white/10">
-        <h2 class="text-2xl font-bold text-black/90 dark:text-white/90 mb-6">
+      <div class="mt-12 pt-8 border-t border-[var(--line-divider)]">
+        <h2 class="text-2xl font-bold text-90 mb-6">
           {i18n(I18nKey.timelineStatistics)}
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -326,13 +319,13 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
                             type === 'project' ? I18nKey.timelineProject :
                             I18nKey.timelineAchievement)}
                     </div>
-                    <div class="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div class="flex-1 bg-[var(--line-divider)] rounded-full h-2">
                       <div 
                         class={`h-2 rounded-full transition-all duration-500 ${
-                          type === 'education' ? 'bg-blue-500' :
-                          type === 'work' ? 'bg-green-500' :
-                          type === 'project' ? 'bg-purple-500' :
-                          'bg-orange-500'
+                          type === 'education' ? 'bg-[var(--accent-blue)]' :
+                          type === 'work' ? 'bg-[var(--accent-green)]' :
+                          type === 'project' ? 'bg-[var(--accent-purple)]' :
+                          'bg-[var(--accent-orange)]'
                         }`}
                         style={`width: ${percentage}%`}
                       ></div>
@@ -354,17 +347,17 @@ const subtitle = i18n(I18nKey.timelineSubtitle);
             <div class="space-y-3">
               <div class="flex justify-between items-center">
                 <span class="text-black/70 dark:text-white/70">{i18n(I18nKey.timelineTotalExperience)}</span>
-                <span class="font-semibold text-black/90 dark:text-white/90">
+                <span class="font-semibold text-90">
                   {workExperience.years} {i18n(I18nKey.timelineYears)} {workExperience.months} {i18n(I18nKey.timelineMonths)}
                 </span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-black/70 dark:text-white/70">{i18n(I18nKey.timelineWorkPositions)}</span>
-                <span class="font-semibold text-black/90 dark:text-white/90">{stats.byType.work}</span>
+                <span class="font-semibold text-90">{stats.byType.work}</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-black/70 dark:text-white/70">{i18n(I18nKey.timelineCurrentRole)}</span>
-                <span class="font-semibold text-black/90 dark:text-white/90">
+                <span class="font-semibold text-90">
                   {currentItems.filter(item => item.type === 'work').length > 0 ? i18n(I18nKey.timelineEmployed) : i18n(I18nKey.timelineAvailable)}
                 </span>
               </div>

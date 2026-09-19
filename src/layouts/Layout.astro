@@ -47,11 +47,6 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 const configHue = siteConfig.themeColor.hue;
 
 // 获取导航栏透明模式配置
-const navbarTransparentMode =
-	siteConfig.banner?.navbar?.transparentMode || "semi";
-// 判断是否应该显示顶部高光效果（只在full和semifull模式下显示）
-const shouldShowTopHighlight =
-	navbarTransparentMode === "full" || navbarTransparentMode === "semifull";
 
 // 获取默认banner图片的辅助函数
 const getDefaultBanner = (): string => {
@@ -211,8 +206,6 @@ const bannerOffset =
 	<body class=" min-h-screen " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner, "zen-maru-gothic-enabled": siteConfig.font.zenMaruGothic.enable}]}
 		  data-overlayscrollbars-initialize
 	>
-		<!-- 页面顶部渐变高光效果 - 只在full和semifull模式下显示 -->
-		{shouldShowTopHighlight && <div class="top-gradient-highlight"></div>}
 		<ConfigCarrier></ConfigCarrier>
 		<slot />
 		
@@ -585,7 +578,6 @@ const bannerOffset =
 				};
 			</script>
 		)}
-		<div class="page-bottom-shadow"></div>
 	</body>
 </html>
 

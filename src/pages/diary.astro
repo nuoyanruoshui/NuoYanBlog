@@ -1,4 +1,5 @@
 ---
+import PageHeader from "../components/PageHeader.astro";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -46,10 +47,7 @@ function formatTime(dateString: string): string {
 				<!-- 页面头部 -->
 				<div class="moments-header mb-6">
 					<div class="header-content">
-						<div class="header-info">
-							<h1 class="moments-title text-xl md:text-2xl lg:text-3xl font-bold text-90 mb-1">{i18n(I18nKey.diary)}</h1>
-							<p class="moments-subtitle text-sm md:text-base lg:text-lg text-75">{i18n(I18nKey.diarySubtitle)}</p>
-						</div>
+						<PageHeader title={i18n(I18nKey.diary)} subtitle={i18n(I18nKey.diarySubtitle)} />
 						<div class="header-stats">
 							<div class="stat-item text-center">
 								<span class="stat-number text-lg md:text-xl lg:text-2xl font-bold text-[var(--primary)]">{moments.length}</span>
@@ -109,46 +107,17 @@ function formatTime(dateString: string): string {
 </MainGridLayout>
 
 <style>
-	.card-base {
-		background: var(--card-bg);
-		border: 1px solid var(--line-divider);
-		transition: all 0.3s ease;
-	}
-	
-	.moments-header {
-		padding: 1rem;
-		border-radius: 8px;
-		background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark, var(--primary)) 100%);
-		color: white;
-		position: relative;
-		overflow: hidden;
-	}
-	
+	/* 注意：这里原本重新定义了 .card-base（加边框、改过渡），
+	   会让日记页的卡片和全站其他页面的卡片长得不一样。已移除，统一走全局样式。 */
+
 	.header-content {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		position: relative;
-		z-index: 1;
+		gap: 1rem;
+		flex-wrap: wrap;
 	}
-	
-	.moments-title {
-		color: white;
-		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-	}
-	
-	.moments-subtitle {
-		color: rgba(255, 255, 255, 0.9);
-	}
-	
-	.stat-number {
-		color: white;
-	}
-	
-	.stat-label {
-		color: rgba(255, 255, 255, 0.8);
-	}
-	
+
 	.image-item img {
 		transition: transform 0.3s ease;
 	}
@@ -171,13 +140,7 @@ function formatTime(dateString: string): string {
 	/* 响应式设计 */
 	/* 手机端 (小于640px) */
 	@media (max-width: 640px) {
-		.moments-header {
-			padding: 0.75rem;
-		}
-		
 		.header-content {
-			flex-direction: column;
-			text-align: center;
 			gap: 0.75rem;
 		}
 		
@@ -194,16 +157,6 @@ function formatTime(dateString: string): string {
 	
 	/* 平板竖屏 (641px - 900px) - 优化显示 */
 	@media (min-width: 641px) and (max-width: 900px) {
-		.moments-header {
-			padding: 1.25rem;
-		}
-		
-		.header-content {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-		
 		.moment-item {
 			padding: 1.5rem;
 		}
@@ -226,10 +179,6 @@ function formatTime(dateString: string): string {
 	
 	/* 平板横屏和桌面端 (大于900px) */
 	@media (min-width: 901px) {
-		.moments-header {
-			padding: 1.5rem;
-		}
-		
 		.moment-item {
 			padding: 2rem;
 		}
@@ -254,10 +203,6 @@ function formatTime(dateString: string): string {
 		
 		.moment-item {
 			border-radius: 8px;
-		}
-		
-		.moments-header {
-			border-radius: 6px;
 		}
 	}
 </style>
