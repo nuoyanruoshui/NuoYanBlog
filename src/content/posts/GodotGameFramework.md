@@ -6,7 +6,7 @@ tags: [GitHub, Godot, 框架]
 category: Godot
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/GodotGameFramework"
-image: "/images/covers/godotgameframework.png"
+image: "/images/covers/godotgameframework.webp"
 pinned: true
 draft: false
 ---

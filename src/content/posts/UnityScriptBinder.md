@@ -6,7 +6,7 @@ tags: [GitHub, Unity, 编辑器]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/UnityScriptBinder"
-image: "/images/covers/unityscriptbinder.png"
+image: "/images/covers/unityscriptbinder.webp"
 draft: false
 ---
 

@@ -6,7 +6,7 @@ tags: [GitHub, Unity, 玩法]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/UnityInteractive"
-image: "/images/covers/unityinteractive.png"
+image: "/images/covers/unityinteractive.webp"
 draft: false
 ---
 

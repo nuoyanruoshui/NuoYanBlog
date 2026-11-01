@@ -6,7 +6,7 @@ tags: [GitHub, Unity, 性能]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/UnityGameObjectPool"
-image: "/images/covers/unitygameobjectpool.png"
+image: "/images/covers/unitygameobjectpool.webp"
 draft: false
 ---
 
