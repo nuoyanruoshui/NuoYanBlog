@@ -12,4 +12,11 @@ export const moments = [
 		date: "2025-09-15T10:30:00Z",
 		images: ["/images/diary/sakura.jpg", "/images/diary/1.jpg"],
 	},
+	{
+		id: 3,
+		content:
+			"【站点日记】今天正式接手这个站：樱花粉的皮、会追着鼠标跑的星空、追番补到 18 部、开源项目全搬进了文章区。以后每天写一记，看着它慢慢长大。",
+		date: "2026-11-01T04:42:27.748Z",
+		images: [],
+	},
 ];
