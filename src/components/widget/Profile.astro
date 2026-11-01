@@ -8,38 +8,34 @@ const config = profileConfig;
 const umamiShareId = profileConfig.umami?.shareId || "";
 const umamiRegion = profileConfig.umami?.region || "eu";
 ---
-<div class="card-base p-3">
+<div class="card-base profile-widget p-3">
     <a aria-label="Go to About Page" href={url('/about/')}
-       class="group block relative mx-auto mt-1 lg:mx-0 lg:mt-0 mb-3
-       max-w-[12rem] lg:max-w-none overflow-hidden rounded-xl active:scale-95">
-        <div class="absolute transition pointer-events-none group-hover:bg-black/30 group-active:bg-black/50
-        w-full h-full z-50 flex items-center justify-center">
-            <Icon name="fa6-regular:address-card"
-                  class="transition opacity-0 scale-90 group-hover:scale-100 group-hover:opacity-100 text-white text-5xl">
-            </Icon>
-        </div>
-        <ImageWrapper src={config.avatar || ""} alt="Profile Image of the Author" class="mx-auto lg:w-full h-full lg:mt-0 "></ImageWrapper>
+       class="profile-widget__avatar group mx-auto lg:mx-0">
+        <span class="profile-widget__avatar-overlay">
+            <Icon name="fa6-regular:address-card" class="profile-widget__avatar-icon"></Icon>
+        </span>
+        <ImageWrapper src={config.avatar || ""} alt="Profile Image of the Author" class="h-full w-full"></ImageWrapper>
     </a>
-    <div class="px-2">
-        <div class="font-bold text-xl text-center mb-1 dark:text-neutral-50 transition">{config.name}</div>
-        <div class="h-1 w-5 bg-[var(--primary)] mx-auto rounded-full mb-2 transition"></div>
-        <div class="text-center text-neutral-400 mb-2.5 transition">{config.bio}</div>
-        <div class="flex gap-2 justify-center mb-1">
+    <div class="px-1.5">
+        <div class="profile-widget__name">{config.name}</div>
+        <div class="profile-widget__divider"></div>
+        <div class="profile-widget__bio">{config.bio}</div>
+        <div class="profile-widget__links">
             {config.links.length > 1 && config.links.map(item =>
-                    <a rel="me" aria-label={item.name} href={item.url} target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90">
-                        <Icon name={item.icon} class="text-[1.5rem]"></Icon>
+                    <a rel="me" aria-label={item.name} href={item.url} target="_blank" class="profile-widget__link">
+                        <Icon name={item.icon} class="text-[1.3rem]"></Icon>
                     </a>
             )}
             {config.links.length == 1 && <a rel="me" aria-label={config.links[0].name} href={config.links[0].url} target="_blank"
-                                            class="btn-regular rounded-lg h-10 gap-2 px-3 font-bold active:scale-95">
-                <Icon name={config.links[0].icon} class="text-[1.5rem]"></Icon>
+                                            class="profile-widget__link profile-widget__link--wide">
+                <Icon name={config.links[0].icon} class="text-[1.3rem]"></Icon>
                 {config.links[0].name}
             </a>}
         </div>
         {config.umami?.enable && (
           <>
-            <div class="text-sm text-gray-500 mt-2 text-center">
-              <Icon name="fa6-solid:eye" class="inline-block mr-1 text-gray-400 text-sm align-middle" />
+            <div class="profile-widget__views">
+              <Icon name="fa6-solid:eye" class="inline-block mr-1 text-[0.75rem] align-middle" />
               浏览量：<span id="umami-pageviews">-</span>，
               访问次数：<span id="umami-visits">-</span>
             </div>
@@ -48,21 +44,16 @@ const umamiRegion = profileConfig.umami?.region || "eu";
                 try {
                   const shareId = umamiShareId;
                   const region = umamiRegion;
-                  console.log('Profile shareId:', shareId, 'region:', region);
-                  
+
                   const shareRes = await fetch(`https://${region}.umami.is/api/share/${shareId}`);
-                  console.log('Profile shareRes status:', shareRes.status);
-                  
                   if (!shareRes.ok) {
                     throw new Error(`Share API failed: ${shareRes.status}`);
                   }
-                  
+
                   const shareData = await shareRes.json();
-                  console.log('Profile shareData:', shareData);
                   const token = shareData.token;
                   const websiteId = shareData.websiteId || shareData.website_id || shareData.id;
-                  console.log('Profile token:', token, 'websiteId:', websiteId);
-                  
+
                   const url = `https://${region}.umami.is/api/websites/${websiteId}/stats?` +
                     new URLSearchParams({
                       startAt: '1753333200000',
@@ -72,24 +63,19 @@ const umamiRegion = profileConfig.umami?.region || "eu";
                       url: '/',
                       compare: 'false',
                     });
-                  console.log('Profile statsUrl:', url);
-                  
+
                   const res = await fetch(url, {
                     method: 'GET',
                     headers: {
                       'x-umami-share-token': token,
                     },
                   });
-                  console.log('Profile stats res status:', res.status);
-                  
+
                   const data = await res.json();
-                  console.log('Profile stats data:', data);
-                  
+
                   if (res.ok) {
-                    const pageviews = data?.pageviews?.value ?? 'N/A';
-                    const visits = data?.visits?.value ?? 'N/A';
-                    document.getElementById('umami-pageviews').textContent = pageviews;
-                    document.getElementById('umami-visits').textContent = visits;
+                    document.getElementById('umami-pageviews').textContent = data?.pageviews?.value ?? 'N/A';
+                    document.getElementById('umami-visits').textContent = data?.visits?.value ?? 'N/A';
                   } else {
                     document.getElementById('umami-pageviews').textContent = 'N/A';
                     document.getElementById('umami-visits').textContent = 'N/A';
@@ -107,3 +93,131 @@ const umamiRegion = profileConfig.umami?.region || "eu";
     </div>
 </div>
 
+<style>
+    .profile-widget__avatar {
+        position: relative;
+        display: block;
+        width: 8.75rem;
+        height: 8.75rem;
+        margin: 0.35rem auto 0.7rem;
+        overflow: hidden;
+        border-radius: 999px;
+        background: var(--card-bg-alt);
+        box-shadow:
+            0 0 0 3px var(--card-bg),
+            0 0 0 4.5px oklch(0.7 0.14 var(--hue) / 0.32),
+            0 12px 26px -16px oklch(0.4 0.08 var(--hue) / 0.7);
+        transition: transform 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
+    }
+
+    .profile-widget__avatar:hover {
+        box-shadow:
+            0 0 0 3px var(--card-bg),
+            0 0 0 4.5px oklch(0.7 0.14 var(--hue) / 0.6),
+            0 14px 30px -16px oklch(0.4 0.08 var(--hue) / 0.8);
+    }
+
+    .profile-widget__avatar:active {
+        transform: scale(0.985);
+    }
+
+    .profile-widget__avatar-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: oklch(0 0 0 / 0);
+        transition: background-color 0.3s ease;
+    }
+
+    .profile-widget__avatar:hover .profile-widget__avatar-overlay {
+        background: oklch(0 0 0 / 0.32);
+    }
+
+    .profile-widget__avatar-icon {
+        font-size: 2.5rem;
+        color: oklch(1 0 0);
+        opacity: 0;
+        transform: scale(0.9);
+        transition: opacity 0.3s ease, transform 0.3s var(--ease-soft);
+    }
+
+    .profile-widget__avatar:hover .profile-widget__avatar-icon {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .profile-widget__name {
+        font-size: 1.15rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        text-align: center;
+        color: var(--deep-text);
+    }
+
+    :global(.dark) .profile-widget__name {
+        color: oklch(0.95 0.008 var(--hue));
+    }
+
+    .profile-widget__divider {
+        width: 1.35rem;
+        height: 0.2rem;
+        margin: 0.4rem auto 0.55rem;
+        border-radius: 999px;
+        background: linear-gradient(to right, var(--primary), oklch(0.75 0.13 calc(var(--hue) + 45)));
+    }
+
+    .profile-widget__bio {
+        font-size: 0.79rem;
+        line-height: 1.6;
+        text-align: center;
+        color: var(--content-meta);
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .profile-widget__links {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+        margin-bottom: 0.15rem;
+    }
+
+    .profile-widget__link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.35rem;
+        height: 2.35rem;
+        border-radius: 0.7rem;
+        color: var(--btn-content);
+        background: var(--btn-regular-bg);
+        transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s var(--ease-soft);
+    }
+
+    .profile-widget__link:hover {
+        color: var(--primary);
+        background: var(--btn-regular-bg-hover);
+        transform: translateY(-1px);
+    }
+
+    .profile-widget__link--wide {
+        width: auto;
+        padding: 0 0.9rem;
+        gap: 0.45rem;
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+
+    .profile-widget__views {
+        margin-top: 0.6rem;
+        font-size: 0.72rem;
+        text-align: center;
+        color: var(--content-meta);
+    }
+</style>

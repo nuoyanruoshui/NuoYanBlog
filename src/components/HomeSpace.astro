@@ -1,0 +1,248 @@
+---
+import { getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
+import getReadingTime from "reading-time";
+import { animeList } from "../data/anime";
+import { moments } from "../data/moments";
+import { projectsData } from "../data/projects";
+import { skillsData } from "../data/skills";
+import { timelineData } from "../data/timeline";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import { url } from "../utils/url-utils";
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+
+const className = Astro.props.class;
+const style = Astro.props.style;
+
+const posts = await getCollection("posts", ({ data }) =>
+	import.meta.env.PROD ? data.draft !== true : true,
+);
+
+let totalWords = 0;
+for (const post of posts) {
+	if (post.body) totalWords += Math.round(getReadingTime(post.body).words);
+}
+
+const formatCompact = (n: number) => {
+	if (n >= 10000) return `${(n / 10000).toFixed(1)}w`;
+	if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
+	return String(n);
+};
+
+const tiles = [
+	{
+		href: url("/archive/"),
+		icon: "material-symbols:article-outline-rounded",
+		label: i18n(I18nKey.articles),
+		count: posts.length,
+		unit: i18n(I18nKey.postsCount),
+		accent: "var(--accent-blue)",
+		accentBg: "var(--accent-blue-bg)",
+	},
+	{
+		href: url("/projects/"),
+		icon: "material-symbols:business-center-outline-rounded",
+		label: i18n(I18nKey.projectsShort),
+		count: projectsData.length,
+		unit: "",
+		accent: "var(--accent-purple)",
+		accentBg: "var(--accent-purple-bg)",
+	},
+	{
+		href: url("/skills/"),
+		icon: "material-symbols:psychology-outline-rounded",
+		label: i18n(I18nKey.skillsShort),
+		count: skillsData.length,
+		unit: "",
+		accent: "var(--accent-teal)",
+		accentBg: "var(--accent-teal-bg)",
+	},
+	{
+		href: url("/timeline/"),
+		icon: "material-symbols:timeline",
+		label: i18n(I18nKey.timeline),
+		count: timelineData.length,
+		unit: "",
+		accent: "var(--accent-amber)",
+		accentBg: "var(--accent-amber-bg)",
+	},
+	{
+		href: url("/anime/"),
+		icon: "material-symbols:movie-outline-rounded",
+		label: i18n(I18nKey.anime),
+		count: animeList.length,
+		unit: "",
+		accent: "var(--accent-red)",
+		accentBg: "var(--accent-red-bg)",
+	},
+	{
+		href: url("/diary/"),
+		icon: "material-symbols:chat-bubble-outline-rounded",
+		label: i18n(I18nKey.diary),
+		count: moments.length,
+		unit: "",
+		accent: "var(--accent-green)",
+		accentBg: "var(--accent-green-bg)",
+	},
+];
+---
+
+<section class:list={["home-space onload-animation", className]} style={style}>
+    <div class="home-space__head">
+        <span class="home-space__tick"></span>
+        <h2 class="home-space__title">{i18n(I18nKey.space)}</h2>
+        <span class="home-space__note">
+            {i18n(I18nKey.totalWords)} {formatCompact(totalWords)}
+        </span>
+    </div>
+
+    <div class="home-space__grid">
+        {tiles.map((tile) => (
+            <a href={tile.href} class="space-tile" style={`--tile-accent:${tile.accent};--tile-accent-bg:${tile.accentBg};`}>
+                <span class="space-tile__icon">
+                    <Icon name={tile.icon} />
+                </span>
+                <span class="space-tile__label">{tile.label}</span>
+                <span class="space-tile__count">
+                    {tile.count}
+                    {tile.unit && <span class="space-tile__unit">{tile.unit}</span>}
+                </span>
+                <Icon name="material-symbols:arrow-right-alt-rounded" class="space-tile__arrow" />
+            </a>
+        ))}
+    </div>
+</section>
+
+<style>
+    .home-space__head {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0 0.25rem 0.6rem;
+    }
+
+    .home-space__tick {
+        width: 0.25rem;
+        height: 1.05rem;
+        border-radius: 999px;
+        background: linear-gradient(to bottom, var(--primary), oklch(0.7 0.14 calc(var(--hue) + 40)));
+    }
+
+    .home-space__title {
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        color: var(--deep-text);
+    }
+
+    :global(.dark) .home-space__title {
+        color: oklch(0.94 0.01 var(--hue));
+    }
+
+    .home-space__note {
+        margin-left: auto;
+        font-size: 0.74rem;
+        color: var(--content-meta);
+        opacity: 0.85;
+    }
+
+    .home-space__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+
+    @media (min-width: 768px) {
+        .home-space__grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.85rem;
+        }
+    }
+
+    .space-tile {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        padding: 0.85rem 1rem;
+        border-radius: var(--radius-large);
+        background-color: var(--card-bg);
+        background-image: var(--surface-sheen);
+        box-shadow: var(--shadow-card);
+        overflow: hidden;
+        transition: box-shadow 0.35s var(--ease-soft), transform 0.35s var(--ease-soft);
+    }
+
+    .space-tile:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-card-hover);
+    }
+
+    .space-tile__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.35rem;
+        height: 2.35rem;
+        flex-shrink: 0;
+        border-radius: 0.75rem;
+        font-size: 1.2rem;
+        color: var(--tile-accent);
+        background: var(--tile-accent-bg);
+        transition: transform 0.35s var(--ease-soft);
+    }
+
+    .space-tile:hover .space-tile__icon {
+        transform: scale(1.06) rotate(-3deg);
+    }
+
+    .space-tile__label {
+        font-size: 0.87rem;
+        font-weight: 600;
+        color: var(--deep-text);
+        white-space: nowrap;
+    }
+
+    :global(.dark) .space-tile__label {
+        color: oklch(0.93 0.01 var(--hue));
+    }
+
+    .space-tile__count {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: baseline;
+        gap: 0.15rem;
+        font-size: 1.15rem;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        color: var(--tile-accent);
+    }
+
+    .space-tile__unit {
+        font-size: 0.68rem;
+        font-weight: 500;
+        opacity: 0.75;
+    }
+
+    .space-tile__arrow {
+        position: absolute;
+        right: 0.7rem;
+        bottom: 0.55rem;
+        font-size: 1rem;
+        color: var(--tile-accent);
+        opacity: 0;
+        transform: translateX(-0.25rem);
+        transition: opacity 0.3s var(--ease-soft), transform 0.3s var(--ease-soft);
+    }
+
+    .space-tile:hover .space-tile__arrow {
+        opacity: 0.85;
+        transform: translateX(0);
+    }
+</style>

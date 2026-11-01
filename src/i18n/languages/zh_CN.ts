@@ -31,6 +31,20 @@ export const zh_CN: Translation = {
 	[Key.postCount]: "篇文章",
 	[Key.postsCount]: "篇文章",
 
+	[Key.readMore]: "阅读全文",
+	[Key.featured]: "精选",
+	[Key.viewAll]: "查看全部",
+	[Key.siteStats]: "站点概览",
+	[Key.totalWords]: "总字数",
+	[Key.noMorePosts]: "更多内容正在路上",
+	[Key.noMorePostsDesc]: "这里还在慢慢生长，订阅 RSS 或常回来看看。",
+	[Key.stayTuned]: "敬请期待",
+
+	[Key.space]: "我的空间",
+	[Key.articles]: "文章",
+	[Key.projectsShort]: "项目",
+	[Key.skillsShort]: "技能",
+
 	[Key.themeColor]: "主题色",
 
 	[Key.lightMode]: "亮色",

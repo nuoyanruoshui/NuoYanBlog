@@ -31,6 +31,21 @@ export const en: Translation = {
 	[Key.postCount]: "post",
 	[Key.postsCount]: "posts",
 
+	[Key.readMore]: "Read more",
+	[Key.featured]: "Featured",
+	[Key.viewAll]: "View all",
+	[Key.siteStats]: "At a glance",
+	[Key.totalWords]: "Total words",
+	[Key.noMorePosts]: "More stories on the way",
+	[Key.noMorePostsDesc]:
+		"This space is still growing. Subscribe to the feed and check back soon.",
+	[Key.stayTuned]: "Stay tuned",
+
+	[Key.space]: "My space",
+	[Key.articles]: "Articles",
+	[Key.projectsShort]: "Projects",
+	[Key.skillsShort]: "Skills",
+
 	[Key.themeColor]: "Theme Color",
 
 	[Key.lightMode]: "Light",

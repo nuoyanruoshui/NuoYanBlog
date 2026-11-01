@@ -31,6 +31,20 @@ export const zh_TW: Translation = {
 	[Key.postCount]: "篇文章",
 	[Key.postsCount]: "篇文章",
 
+	[Key.readMore]: "閱讀全文",
+	[Key.featured]: "精選",
+	[Key.viewAll]: "查看全部",
+	[Key.siteStats]: "站點概覽",
+	[Key.totalWords]: "總字數",
+	[Key.noMorePosts]: "更多內容正在路上",
+	[Key.noMorePostsDesc]: "這裡還在慢慢生長，訂閱 RSS 或常回來看看。",
+	[Key.stayTuned]: "敬請期待",
+
+	[Key.space]: "我的空間",
+	[Key.articles]: "文章",
+	[Key.projectsShort]: "專案",
+	[Key.skillsShort]: "技能",
+
 	[Key.themeColor]: "主題色",
 
 	[Key.lightMode]: "亮色",

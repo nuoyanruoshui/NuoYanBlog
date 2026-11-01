@@ -1,54 +1,41 @@
-# 关于自己
-**终有一天我会做出属于自己的游戏**
-<!-- This website is built with the **Astro** framework using the [Mizuki](https://github.com/matsuzaka-yuki/mizuki) theme. -->
+# 关于我
 
-<!-- ::github{repo="matsuzaka-yuki/Mizuki"}
+> 一人一心一旧城，旧街旧巷等旧人。
 
-## 🌟 Theme Features
+我是诺言若水，也可以叫我 NuoYan。一个正在学做游戏的 Unity 开发者，喜欢把重复的事情写成工具，也喜欢在深夜把学到的东西整理成笔记。
 
-### 🎨 Design & User Experience
-- **Modern & Elegant Design** - Clean, minimalist interface with beautiful typography
-- **Fully Responsive** - Optimized for all devices from mobile to desktop
-- **Dark/Light Mode** - Automatic theme switching with smooth transitions
-- **Beautiful Typography** - Enhanced readability with JetBrains Mono font
-- **Smooth Animations** - Fluid page transitions and interactive elements
+## 我在做什么
 
-### 🔍 Content & Search
-- **Advanced Search** - Powered by [Pagefind](https://pagefind.app/) for fast, accurate results
-- **Enhanced Markdown** - Extended syntax with code highlighting and math support
-- **Interactive Table of Contents** - Auto-scroll navigation for long articles
-- **RSS Feed Generation** - Stay updated with automatic feed generation
-- **Reading Time Estimation** - Know how long articles take to read
-- **Post Categorization** - Organize content with tags and categories
+从 2024 年 7 月开始，我在武汉做 Unity 游戏开发，日常是内置小游戏的开发、存档管理，以及各种 UI 场景的搭建和交互实现。
 
-### 🌐 Internationalization
-- **Multi-language Support** - Real-time translation capabilities
-- **Auto Language Detection** - Detects user preferences automatically
-- **Client-side Translation** - Powered by Edge Translate technology
-- **10+ Languages Supported** - EN, ZH-CN, ZH-TW, JA, KO, ES, TH, VI, ID, TR
+做久了会发现，很多时间是花在重复的事情上的——导表、配资源、摆界面。所以我也在把这些环节一个个做成工具：
 
-### 📱 Special Pages
-- **Anime Tracking Page** - Track your anime watching progress with ratings
-- **Friends Links Page** - Showcase friend websites with beautiful cards
-- **Diary/Moments Page** - Share life moments like social media posts
-- **Archive Page** - Organized timeline view of all posts
-- **About Page** - Customizable personal introduction (this page!)
+- **Unity Excel Importer**：把策划的表格直接读进 Unity，省掉手工配置资源的来回折腾
+- **GF Unity Excel Importer**：把上面这套适配到 GF 框架上
+- **Unity UI Manager**：一个简单好用的 UI 管理框架，负责面板的全局管理、动画和性能优化
 
-### 🛠 Technical Features
-- **Enhanced Code Blocks** - Powered by [Expressive Code](https://expressive-code.com/)
-- **Math Support** - LaTeX rendering with KaTeX for mathematical expressions
-- **Image Optimization** - PhotoSwipe gallery with lazy loading
-- **SEO Optimized** - Built-in sitemap and meta tags for better search visibility
-- **Performance Optimized** - Fast loading with caching and optimization
-- **Comment System Ready** - Integration support for Twikoo comments
+目前还在啃 Unity 的资源管理和热更新，[Addressables 那篇笔记](/posts/unityaddressable/addressable/)就是学习过程的产物。
 
-### 🎯 Advanced Markdown Features
-- **Callouts & Admonitions** - Beautiful info boxes with `> [!NOTE]`, `> [!TIP]`, `> [!WARNING]`
-- **Mathematical Equations** - Write LaTeX math with `$inline$` and `$$block$$` syntax
-- **GitHub Cards** - Embed repository cards with `::github{repo="user/repo"}`
-- **Syntax Highlighting** - Advanced code highlighting with line numbers
-- **Copy Code Buttons** - Easy code copying functionality
+## 这个站点是什么样的地方
+
+说不上是"博客"，更像自己的一个房间。这里会放：
+
+- **技术笔记**：Unity、C# 和工作中踩过的坑，尽量写成"以后再遇到能直接抄"的样子
+- **开源小工具**：自己做的东西，能帮到别人就更好了
+- **生活碎片**：追过的番、随手拍的图和一句感慨
+
+我不追流量，也不太在意更新频率。写下来主要是怕自己忘了，顺便万一能帮到正在搜同一个报错的人。
+
+## 常用工具
+
+`Unity` `C#` `Git` `MySQL` `VS Code` `Visual Studio` `GF 框架`
+
+## 关于本站
+
+用 [Astro](https://astro.build) 和 [Mizuki](https://github.com/matsuzaka-yuki/mizuki) 主题搭起来，搜索由 Pagefind 提供。
+
+如果你想跟着看更新，可以订阅 [RSS](/rss/)；想聊两句，[B 站](https://space.bilibili.com/498740768)、[GitHub](https://github.com/immortal5205)、[Gitee](https://gitee.com/NuoYanRuoShui) 都能找到我。
 
 ---
 
-*Built with ❤️ using Astro and inspired by modern web design principles.* -->
+*终有一天我会做出属于自己的游戏。*

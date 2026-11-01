@@ -1,0 +1,214 @@
+---
+import type { CollectionEntry } from "astro:content";
+import path from "node:path";
+import { Icon } from "astro-icon/components";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import { formatDateToYYYYMMDD } from "../utils/date-utils";
+import {
+	getCategoryUrl,
+	getDir,
+	getPostUrlBySlug,
+	getTagUrl,
+} from "../utils/url-utils";
+import ImageWrapper from "./misc/ImageWrapper.astro";
+
+interface Props {
+	entry: CollectionEntry<"posts">;
+	class?: string;
+	style?: string;
+}
+
+const { entry, style } = Astro.props;
+const className = Astro.props.class;
+
+const { remarkPluginFrontmatter } = await entry.render();
+
+const postUrl = getPostUrlBySlug(entry.slug);
+const hasCover = Boolean(entry.data.image);
+const tags = (entry.data.tags ?? []).slice(0, 3).filter(Boolean);
+const excerpt = entry.data.description || remarkPluginFrontmatter.excerpt;
+---
+
+<article class:list={["featured-post group relative block w-full overflow-hidden rounded-[var(--radius-large)] onload-animation", className]}
+         style={style}>
+    <!-- 整块卡片的主链接，铺在内容和封面之上 -->
+    <a href={postUrl} class="featured-post__link" aria-label={entry.data.title}></a>
+
+    <!-- 封面：无封面时退化为主题色渐变 -->
+    <div class="featured-post__media relative z-0 w-full">
+        {hasCover ? (
+            <ImageWrapper
+                src={entry.data.image}
+                basePath={path.join("content/posts/", getDir(entry.id))}
+                alt={entry.data.title}
+                class="absolute inset-0 h-full w-full"
+                imgClass="featured-post__image"
+            />
+        ) : (
+            <div class="absolute inset-0 featured-post__fallback"></div>
+        )}
+
+        <!-- 渐变遮罩：保证文字始终可读 -->
+        <div class="featured-post__scrim pointer-events-none absolute inset-0"></div>
+        <div class="featured-post__glow pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+    </div>
+
+    <!-- 正文覆盖在封面下方 -->
+    <div class="featured-post__body absolute inset-x-0 bottom-0 z-[2] p-6 text-white md:p-9">
+        <div class="mb-3.5 flex flex-wrap items-center gap-2">
+            <span class="featured-post__badge">
+                <Icon name="material-symbols:local-fire-department-rounded" class="text-[0.95rem]" />
+                {i18n(I18nKey.featured)}
+            </span>
+            {entry.data.pinned && (
+                <span class="featured-post__chip">
+                    <Icon name="mdi:pin" class="text-[0.85rem]" />
+                </span>
+            )}
+            {entry.data.category && (
+                <a href={getCategoryUrl(entry.data.category)}
+                   class="featured-post__chip featured-post__interactive transition-colors hover:bg-white/25">
+                    {entry.data.category}
+                </a>
+            )}
+        </div>
+
+        <h2 class="featured-post__title line-clamp-2 max-w-[54rem] text-[1.55rem]/[1.45] font-bold tracking-tight md:text-[2.15rem]/[1.25]">
+            {entry.data.title}
+        </h2>
+
+        {excerpt && (
+            <p class="mt-2.5 line-clamp-2 max-w-[46rem] text-[0.9rem] leading-relaxed text-white/70 md:text-[0.95rem]">
+                {excerpt}
+            </p>
+        )}
+
+        <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.78rem] text-white/65 md:mt-5">
+            <span class="inline-flex items-center gap-1.5">
+                <Icon name="material-symbols:calendar-today-outline-rounded" class="text-[1rem]" />
+                {formatDateToYYYYMMDD(entry.data.published)}
+            </span>
+            <span class="inline-flex items-center gap-1.5">
+                <Icon name="material-symbols:schedule-outline-rounded" class="text-[1rem]" />
+                {remarkPluginFrontmatter.minutes} {i18n(I18nKey.minutesCount)}
+            </span>
+            <span class="inline-flex items-center gap-1.5">
+                <Icon name="material-symbols:notes-rounded" class="text-[1rem]" />
+                {remarkPluginFrontmatter.words} {i18n(I18nKey.wordsCount)}
+            </span>
+            {tags.length > 0 && (
+                <span class="hidden items-center gap-1.5 sm:inline-flex">
+                    <Icon name="material-symbols:tag-rounded" class="text-[1rem]" />
+                    {tags.map((tag: string, i: number) => (
+                        <span class="inline-flex items-center gap-1.5">
+                            {i > 0 && <span class="text-white/25">/</span>}
+                            <a href={getTagUrl(tag)}
+                               class="featured-post__interactive transition-colors hover:text-white">{tag.trim()}</a>
+                        </span>
+                    ))}
+                </span>
+            )}
+        </div>
+
+        <span class="featured-post__cta featured-post__interactive mt-5 inline-flex items-center gap-1.5 rounded-full bg-white/12 px-4 py-2 text-[0.82rem] font-semibold ring-1 ring-white/20 transition-all duration-300 group-hover:bg-white group-hover:text-neutral-900 group-hover:ring-white">
+            {i18n(I18nKey.readMore)}
+            <Icon name="material-symbols:arrow-right-alt-rounded" class="text-[1.15rem] transition-transform duration-300 group-hover:translate-x-0.5" />
+        </span>
+    </div>
+</article>
+
+<style>
+    .featured-post {
+        isolation: isolate;
+        box-shadow: var(--shadow-card);
+        transition: box-shadow 0.45s var(--ease-soft), transform 0.45s var(--ease-soft);
+    }
+
+    .featured-post:hover {
+        box-shadow: var(--shadow-card-hover);
+    }
+
+    .featured-post__link {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+    }
+
+    .featured-post__media {
+        height: 21rem;
+        background: var(--card-bg-alt);
+    }
+
+    @media (min-width: 768px) {
+        .featured-post__media {
+            height: 25rem;
+        }
+    }
+
+    .featured-post__image {
+        transform: scale(1.02);
+        transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .featured-post:hover .featured-post__image {
+        transform: scale(1.075);
+    }
+
+    .featured-post__scrim {
+        background: linear-gradient(to top, oklch(0 0 0 / 0.9), oklch(0 0 0 / 0.45) 45%, oklch(0 0 0 / 0.05));
+    }
+
+    .featured-post__fallback {
+        background:
+            radial-gradient(ellipse 70% 90% at 18% 10%, oklch(0.72 0.16 var(--hue) / 0.9), transparent 70%),
+            radial-gradient(ellipse 70% 90% at 88% 90%, oklch(0.55 0.16 calc(var(--hue) + 45) / 0.9), transparent 72%),
+            oklch(0.35 0.08 var(--hue));
+    }
+
+    .featured-post__glow {
+        background: radial-gradient(ellipse 80% 60% at 50% 120%, oklch(0.75 0.14 var(--hue) / 0.35), transparent 70%);
+    }
+
+    .featured-post__body {
+        pointer-events: none;
+    }
+
+    .featured-post__interactive {
+        pointer-events: auto;
+        position: relative;
+        z-index: 3;
+    }
+
+    .featured-post__title {
+        text-shadow: 0 2px 18px oklch(0 0 0 / 0.45);
+    }
+
+    .featured-post__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        border-radius: 999px;
+        padding: 0.25rem 0.7rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: oklch(0.22 0.05 var(--hue));
+        background: oklch(0.92 0.1 var(--hue));
+        box-shadow: 0 4px 14px -4px oklch(0.7 0.16 var(--hue) / 0.7);
+    }
+
+    .featured-post__chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        border-radius: 999px;
+        padding: 0.25rem 0.65rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: oklch(1 0 0 / 0.92);
+        background: oklch(1 0 0 / 0.14);
+        box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.18);
+        backdrop-filter: blur(8px);
+    }
+</style>

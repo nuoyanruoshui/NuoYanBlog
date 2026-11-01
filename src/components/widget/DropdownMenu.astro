@@ -2,7 +2,7 @@
 import { Icon } from "astro-icon/components";
 import { LinkPresets } from "../../constants/link-presets";
 import { LinkPreset, type NavBarLink } from "../../types/config";
-import { url } from "../../utils/url-utils";
+import { pathsEqual, url } from "../../utils/url-utils";
 
 interface Props {
 	link: NavBarLink;
@@ -23,12 +23,18 @@ const processedLink = {
 };
 
 const hasChildren = processedLink.children && processedLink.children.length > 0;
+
+const isChildActive = (child: NavBarLink) =>
+	!child.external && pathsEqual(Astro.url.pathname, url(child.url));
+
+const hasActiveChild = Boolean(processedLink.children?.some(isChildActive));
+const isActive = hasChildren ? hasActiveChild : isChildActive(processedLink);
 ---
 
 <div class:list={["dropdown-container", className]} data-dropdown>
 	{hasChildren ? (
 		<button 
-			class="btn-plain scale-animation rounded-lg h-11 font-bold px-5 active:scale-95 dropdown-trigger"
+			class:list={["btn-plain scale-animation rounded-lg h-11 font-bold px-4 active:scale-95 dropdown-trigger nav-link", { "nav-link--active": isActive }]}
 			aria-expanded="false"
 			aria-haspopup="true"
 			data-dropdown-trigger
@@ -64,7 +70,7 @@ const hasChildren = processedLink.children && processedLink.children.length > 0;
 			aria-label={processedLink.name} 
 			href={processedLink.external ? processedLink.url : url(processedLink.url)} 
 			target={processedLink.external ? "_blank" : null}
-			class="btn-plain scale-animation rounded-lg h-11 font-bold px-5 active:scale-95"
+			class:list={["btn-plain scale-animation rounded-lg h-11 font-bold px-4 active:scale-95 nav-link", { "nav-link--active": isActive }]}
 		>
 			<div class="flex items-center">
 				{processedLink.icon && <Icon name={processedLink.icon} class="text-[1.1rem] mr-2" />}
@@ -78,6 +84,18 @@ const hasChildren = processedLink.children && processedLink.children.length > 0;
 <style>
 	.dropdown-container {
 		@apply relative;
+	}
+
+	.nav-link {
+		position: relative;
+		font-size: 0.91rem;
+		letter-spacing: 0.01em;
+		transition: color 0.2s ease, background-color 0.2s ease;
+	}
+
+	.nav-link--active {
+		color: var(--primary);
+		background: var(--primary-subtle);
 	}
 
 	.dropdown-menu {
@@ -95,19 +113,33 @@ const hasChildren = processedLink.children && processedLink.children.length > 0;
 	}
 
 	.dropdown-content {
-		@apply bg-[var(--float-panel-bg)] rounded-[var(--radius-large)] shadow-xl dark:shadow-none border border-black/5 dark:border-white/10 py-2 min-w-[12rem];
+		min-width: 11.5rem;
+		padding: 0.4rem;
+		border-radius: 1rem;
+		background: var(--float-panel-bg);
+		box-shadow: var(--shadow-float);
 	}
 
 	.dropdown-item {
-		@apply flex items-center justify-between px-4 py-2.5 text-black/75 dark:text-white/75 hover:text-[var(--primary)] hover:bg-[var(--btn-plain-bg-hover)] transition-colors duration-150 font-medium;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding: 0.55rem 0.7rem;
+		border-radius: 0.65rem;
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: var(--content-meta);
+		transition: color 0.18s ease, background-color 0.18s ease;
 	}
 
-	.dropdown-item:first-child {
-		@apply rounded-t-[calc(var(--radius-large)-0.5rem)];
+	.dropdown-item:hover {
+		color: var(--primary);
+		background: var(--btn-plain-bg-hover);
 	}
 
-	.dropdown-item:last-child {
-		@apply rounded-b-[calc(var(--radius-large)-0.5rem)];
+	.dropdown-item .anchor-icon {
+		display: none;
 	}
 
 	/* 移动端隐藏下拉菜单 */

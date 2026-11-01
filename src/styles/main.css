@@ -34,22 +34,38 @@ html {
 }
 
 /*
- * 页面背景：主题色网格渐变。
- * 写在 html 上，背景会传播到 canvas，因此无论内容多长都铺满整个视口，
- * 不会出现"内容到底部后露出空白"的问题。跟随 --hue 自动变色。
+ * 页面背景：跟随 --hue 的极光底纹。
+ * 底色给 canvas，装饰层（色团 + 点阵 + 噪点）放在固定定位的 html::before 上：
+ * 既铺满整个视口，又不会因为 background-attachment: fixed 在滚动时反复重绘。
  */
 :root {
-    --page-bg-gradient:
-        radial-gradient(ellipse 70% 55% at 12% -8%, oklch(0.88 0.075 var(--hue) / 0.55), transparent 62%),
-        radial-gradient(ellipse 60% 45% at 96% -4%, oklch(0.86 0.09 calc(var(--hue) + 50) / 0.42), transparent 58%),
-        radial-gradient(ellipse 90% 60% at 50% 106%, oklch(0.90 0.055 calc(var(--hue) + 25) / 0.40), transparent 62%);
+    --page-bg-layers:
+        radial-gradient(circle, var(--bg-dot) 1px, transparent 1.4px),
+        radial-gradient(ellipse 58% 46% at 4% -6%, var(--aurora-a), transparent 68%),
+        radial-gradient(ellipse 54% 40% at 98% 2%, var(--aurora-b), transparent 66%),
+        radial-gradient(ellipse 85% 52% at 48% 114%, var(--aurora-c), transparent 70%),
+        linear-gradient(to bottom, var(--bg-top-glow), transparent 34vh);
+    --page-bg-sizes: 26px 26px, 122% 104%, 118% 100%, 150% 120%, 100% 42vh;
+    --page-bg-positions: 0 0, left top, right top, center bottom, center top;
 }
 
-:root.dark {
-    --page-bg-gradient:
-        radial-gradient(ellipse 70% 55% at 12% -8%, oklch(0.42 0.09 var(--hue) / 0.45), transparent 62%),
-        radial-gradient(ellipse 60% 45% at 96% -4%, oklch(0.38 0.10 calc(var(--hue) + 50) / 0.35), transparent 58%),
-        radial-gradient(ellipse 90% 60% at 50% 106%, oklch(0.34 0.07 calc(var(--hue) + 25) / 0.38), transparent 62%);
+html {
+    background-color: var(--page-bg);
+}
+
+html::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: var(--page-bg-layers);
+    background-size: var(--page-bg-sizes);
+    background-position: var(--page-bg-positions);
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+    /* 提升为独立合成层，滚动时不再重绘 */
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 /*
@@ -91,15 +107,21 @@ html {
     }
 }
 
-html {
-    background-image: var(--page-bg-gradient);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-}
-
 /* 当启用 ZenMaruGothic-Medium 字体时应用为全局字体 */
 .zen-maru-gothic-enabled {
   font-family: 'ZenMaruGothic-Medium', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* 导航栏：卡片式浮起 + 细描边，与页面背景拉开层次 */
+#navbar > div {
+    box-shadow: var(--shadow-card);
+}
+
+/* 看板娘：窗口高度不足时收起，避免压在侧边栏卡片上 */
+@media (max-height: 880px) {
+    .pio-container {
+        display: none;
+    }
 }
 
 @layer components {
@@ -167,12 +189,14 @@ html {
     }
     
     .card-base {
-        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)];
+        @apply rounded-[var(--radius-large)] overflow-hidden;
+        background-color: var(--card-bg);
+        background-image: var(--surface-sheen);
         box-shadow: var(--shadow-card);
         /* 只过渡真正会变化的属性，避免 transition-all 造成的整树重绘 */
-        transition: box-shadow 0.35s var(--ease-soft),
-                    transform 0.35s var(--ease-soft),
-                    background-color 0.2s ease;
+        transition: box-shadow 0.4s var(--ease-soft),
+                    transform 0.4s var(--ease-soft),
+                    background-color 0.25s ease;
     }
 
     .card-base:hover {

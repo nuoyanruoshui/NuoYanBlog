@@ -1,78 +1,11 @@
 ---
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
 import PageHeader from "../components/PageHeader.astro";
+// 追番数据
+import { animeList } from "../data/anime";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
-
-// 追番数据
-const animeList = [
-	{
-		title: "凡人修仙传",
-		status: "watching",
-		rating: 9.7,
-		cover: "assets/anime/fanren.png",
-		description: "他日仙界重相逢，一声道友尽沧桑。",
-		episodes: "12 episodes",
-		year: "2020",
-		genre: ["修仙", "仙侠", "国创"],
-		studio: "原力",
-		link: "https://www.bilibili.com/bangumi/media/md28223043",
-		progress: 161,
-		totalEpisodes: 161,
-		startDate: "2020",
-		endDate: "2025-09",
-	},
-	{
-		title: "薰香花朵凛然绽放",
-		status: "watching",
-		rating: 9.5,
-		cover: "assets/anime/xunzi.png",
-		description:
-			"窗帘的另一头，是和我永远没有交集的世界——差生云集的底层男校千鸟高中，一直被历史悠久的贵族女校桔梗女校所鄙视。尽管两校的校舍相邻，但桔梗女校从来都是将窗帘拉得严严实实，不让千鸟高中的人看到人影。在千鸟上学的䌷凛太郎，因为长相问题，经常被人误以为是一个可怕的人不敢接近，因此也习惯了和他人保持距离。而在某一天，在给家里的蛋糕店帮忙时，一个名叫薰子的顾客对他说：“我从来不觉得凛太郎很可怕啊？”薰子对凛太郎没有半点偏见，和她一起度过的时光既让凛太郎感到困惑，也感到惬意。但他很快就发现，薰子是桔梗女校的学生……",
-		episodes: "12 episodes",
-		year: "2025",
-		genre: ["日常生活", "校园恋爱"],
-		studio: "Aniplex",
-		link: "https://www.bilibili.com/bangumi/media/md26641346",
-		progress: 8,
-		totalEpisodes: 12,
-		startDate: "2025-07",
-		endDate: "2025-09",
-	},
-	{
-		title: "夏日口袋",
-		status: "watching",
-		rating: 9.8,
-		cover: "assets/anime/xiari.png",
-		description: "希望这个暑假永远不会结束......",
-		episodes: "12 episodes",
-		year: "2025",
-		genre: ["治愈", "日常"],
-		studio: "鸟白岛观光协会",
-		link: "https://www.bilibili.com/bangumi/media/md25572685",
-		progress: 8,
-		totalEpisodes: 25,
-		startDate: "2025-04",
-		endDate: "2025-09",
-	},
-	{
-		title: "碧蓝之海",
-		status: "completed",
-		rating: 9.9,
-		cover: "assets/anime/bilan.png",
-		description: "我们的夏天永远不会结束！",
-		episodes: "12 episodes",
-		year: "2025",
-		genre: ["大学", "乌龙茶"],
-		studio: "WZERO-G×liber",
-		link: "https://www.bilibili.com/bangumi/media/md26714035",
-		progress: 12,
-		totalEpisodes: 12,
-		startDate: "2025-07",
-		endDate: "2025-09",
-	},
-];
 
 // 获取状态的翻译文本和样式
 function getStatusInfo(status: string) {

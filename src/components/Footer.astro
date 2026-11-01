@@ -2,8 +2,12 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { footerConfig, profileConfig } from "../config";
+import { Icon } from "astro-icon/components";
+import { footerConfig, profileConfig, siteConfig } from "../config";
+import { LinkPresets } from "../constants/link-presets";
+import { LinkPreset } from "../types/config";
 import { url } from "../utils/url-utils";
+import ImageWrapper from "./misc/ImageWrapper.astro";
 
 const currentYear = new Date().getFullYear();
 
@@ -23,23 +27,222 @@ if (footerConfig.enable) {
 		console.warn("FooterConfig.html文件读取失败:", error.message);
 	}
 }
+
+const quickLinks = [
+	LinkPresets[LinkPreset.Home],
+	LinkPresets[LinkPreset.Archive],
+	LinkPresets[LinkPreset.About],
+	LinkPresets[LinkPreset.Friends],
+	LinkPresets[LinkPreset.Projects],
+	LinkPresets[LinkPreset.Skills],
+];
 ---
 
-<!--<div class="border-t border-[var(&#45;&#45;primary)] mx-16 border-dashed py-8 max-w-[var(&#45;&#45;page-width)] flex flex-col items-center justify-center px-6">-->
-<div class="transition border-t border-black/10 dark:border-white/15 my-10 border-dashed mx-32"></div>
-<!--<div class="transition bg-[oklch(92%_0.01_var(&#45;&#45;hue))] dark:bg-black rounded-2xl py-8 mt-4 mb-8 flex flex-col items-center justify-center px-6">-->
-<div class="transition border-dashed border-[oklch(85%_0.01_var(--hue))] dark:border-white/15 rounded-2xl mb-12 flex flex-col items-center justify-center px-6">
-    <div class="transition text-50 text-sm text-center">
-        {customFooterHtml && (
-            <div class="mb-2" set:html={customFooterHtml}></div>
-        )}
-        &copy; <span id="copyright-year">{currentYear}</span> {profileConfig.name}. All Rights Reserved. /
-        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href={url('rss/')}>RSS</a> /
-        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href={url('sitemap-index.xml')}>Sitemap</a><br>
-        Powered by
-        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://astro.build">Astro</a> &
-        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/matsuzaka-yuki/mizuki">Mizuki</a>&nbsp; Version <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/matsuzaka-yuki/mizuki">4.9.3<br>
-        
+<div class="site-footer">
+    <div class="site-footer__top">
+        <div class="site-footer__brand">
+            <a href={url('/')} class="site-footer__avatar" aria-label={siteConfig.title}>
+                <ImageWrapper src={profileConfig.avatar || ""} alt={siteConfig.title} class="h-full w-full"></ImageWrapper>
+            </a>
+            <div class="site-footer__identity">
+                <div class="site-footer__name">{siteConfig.title}</div>
+                <div class="site-footer__tagline">{siteConfig.subtitle}</div>
+            </div>
+        </div>
 
+        <nav class="site-footer__nav" aria-label="Footer navigation">
+            {quickLinks.map((link) => (
+                <a href={url(link.url)} class="site-footer__nav-link">{link.name}</a>
+            ))}
+        </nav>
+
+        <div class="site-footer__social">
+            {profileConfig.links.map((item) => (
+                <a rel="me" aria-label={item.name} href={item.url} target="_blank" class="site-footer__social-link">
+                    <Icon name={item.icon} />
+                </a>
+            ))}
+        </div>
+    </div>
+
+    <div class="site-footer__divider"></div>
+
+    <div class="site-footer__bottom">
+        {customFooterHtml && (
+            <div class="site-footer__custom" set:html={customFooterHtml}></div>
+        )}
+        <span class="site-footer__copy">
+            &copy; <span id="copyright-year">{currentYear}</span> {profileConfig.name}
+        </span>
+        <span class="site-footer__dot">·</span>
+        <a class="site-footer__meta-link" target="_blank" href={url('rss/')}>RSS</a>
+        <a class="site-footer__meta-link" target="_blank" href={url('sitemap-index.xml')}>Sitemap</a>
+        <span class="site-footer__dot">·</span>
+        <span class="site-footer__powered">
+            Powered by
+            <a class="site-footer__meta-link" target="_blank" href="https://astro.build">Astro</a>
+            &
+            <a class="site-footer__meta-link" target="_blank" href="https://github.com/matsuzaka-yuki/mizuki">Mizuki</a>
+        </span>
     </div>
 </div>
+
+<style>
+    .site-footer {
+        margin-top: 1.25rem;
+        padding: 1.4rem 0.5rem 1.2rem;
+        border-top: 1px dashed var(--line-color);
+    }
+
+    .site-footer__top {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1.25rem 2rem;
+    }
+
+    .site-footer__brand {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        min-width: 0;
+    }
+
+    .site-footer__avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        flex-shrink: 0;
+        overflow: hidden;
+        border-radius: 0.8rem;
+        background: var(--card-bg-alt);
+        box-shadow: inset 0 0 0 1px var(--hairline);
+    }
+
+    .site-footer__identity {
+        min-width: 0;
+    }
+
+    .site-footer__name {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--deep-text);
+    }
+
+    :global(.dark) .site-footer__name {
+        color: oklch(0.94 0.01 var(--hue));
+    }
+
+    .site-footer__tagline {
+        font-size: 0.74rem;
+        color: var(--content-meta);
+        opacity: 0.85;
+    }
+
+    .site-footer__nav {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.15rem 0.35rem;
+        margin-left: auto;
+    }
+
+    .site-footer__nav-link {
+        padding: 0.25rem 0.55rem;
+        border-radius: 0.5rem;
+        font-size: 0.78rem;
+        color: var(--content-meta);
+        transition: color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .site-footer__nav-link:hover {
+        color: var(--primary);
+        background: var(--primary-subtle);
+    }
+
+    .site-footer__social {
+        display: flex;
+        gap: 0.4rem;
+    }
+
+    .site-footer__social-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.9rem;
+        height: 1.9rem;
+        border-radius: 0.6rem;
+        font-size: 1.05rem;
+        color: var(--content-meta);
+        background: oklch(0 0 0 / 0.035);
+        transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s var(--ease-soft);
+    }
+
+    :global(.dark) .site-footer__social-link {
+        background: oklch(1 0 0 / 0.055);
+    }
+
+    .site-footer__social-link:hover {
+        color: var(--primary);
+        background: var(--primary-subtle);
+        transform: translateY(-1px);
+    }
+
+    .site-footer__divider {
+        height: 1px;
+        margin: 1.1rem 0 0.8rem;
+        background: var(--line-divider);
+        opacity: 0.7;
+    }
+
+    .site-footer__bottom {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.73rem;
+        color: var(--content-meta);
+        opacity: 0.9;
+    }
+
+    .site-footer__copy {
+        font-weight: 500;
+    }
+
+    .site-footer__dot {
+        opacity: 0.4;
+    }
+
+    .site-footer__meta-link {
+        transition: color 0.2s ease;
+    }
+
+    .site-footer__meta-link:hover {
+        color: var(--primary);
+    }
+
+    .site-footer__custom {
+        width: 100%;
+        margin-bottom: 0.3rem;
+    }
+
+    .site-footer__powered {
+        margin-left: auto;
+    }
+
+    /* 右下角有音乐播放器/返回顶部，给底部留出避让空间 */
+    @media (min-width: 1024px) {
+        .site-footer__bottom {
+            padding-right: 4.5rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .site-footer__nav {
+            margin-left: 0;
+        }
+
+        .site-footer__powered {
+            margin-left: 0;
+        }
+    }
+</style>

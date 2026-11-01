@@ -31,6 +31,21 @@ export const ja: Translation = {
 	[Key.postCount]: "件の投稿",
 	[Key.postsCount]: "件の投稿",
 
+	[Key.readMore]: "続きを読む",
+	[Key.featured]: "注目",
+	[Key.viewAll]: "すべて見る",
+	[Key.siteStats]: "サイト概要",
+	[Key.totalWords]: "総文字数",
+	[Key.noMorePosts]: "新しい記事を準備中",
+	[Key.noMorePostsDesc]:
+		"この場所はまだ育っています。RSS を購読してまた覗いてみてください。",
+	[Key.stayTuned]: "お楽しみに",
+
+	[Key.space]: "マイスペース",
+	[Key.articles]: "記事",
+	[Key.projectsShort]: "プロジェクト",
+	[Key.skillsShort]: "スキル",
+
 	[Key.themeColor]: "テーマカラー",
 
 	[Key.lightMode]: "ライト",

@@ -28,6 +28,20 @@ enum I18nKey {
 	postCount = "postCount",
 	postsCount = "postsCount",
 
+	// 首页与信息流
+	readMore = "readMore",
+	featured = "featured",
+	viewAll = "viewAll",
+	siteStats = "siteStats",
+	totalWords = "totalWords",
+	noMorePosts = "noMorePosts",
+	noMorePostsDesc = "noMorePostsDesc",
+	stayTuned = "stayTuned",
+	space = "space",
+	articles = "articles",
+	projectsShort = "projectsShort",
+	skillsShort = "skillsShort",
+
 	themeColor = "themeColor",
 
 	lightMode = "lightMode",

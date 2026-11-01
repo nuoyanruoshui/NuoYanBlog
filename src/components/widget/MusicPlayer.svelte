@@ -49,6 +49,8 @@ let isRepeating = 0;
 let errorMessage = "";
 // 是否显示错误信息，默认为 false
 let showError = false;
+// 是否已经拿到可播放的歌曲：拿到之前不渲染播放器，避免出现「示例歌曲」这类占位内容
+let ready = false;
 
 // 当前歌曲信息
 let currentSong = {
@@ -125,7 +127,9 @@ async function fetchMetingPlaylist() {
 		}
 		isLoading = false;
 	} catch (e) {
-		showErrorMessage("Meting 歌单获取失败");
+		// 歌单拉取失败时静默收起播放器：不在页面上留错误提示，只在控制台记录
+		console.warn("[MusicPlayer] Meting 歌单获取失败:", e);
+		isHidden = true;
 		isLoading = false;
 	}
 }
@@ -240,6 +244,7 @@ function loadSong(song: typeof currentSong) {
 
 function handleLoadSuccess() {
 	isLoading = false;
+	ready = true;
 	if (audio?.duration && audio.duration > 1) {
 		duration = Math.floor(audio.duration);
 		if (playlist[currentIndex]) playlist[currentIndex].duration = duration;
@@ -374,6 +379,7 @@ onDestroy(() => {
 </div>
 {/if}
 
+{#if ready}
 <div class="music-player fixed bottom-4 right-4 z-50 transition-all duration-300 ease-in-out"
      class:expanded={isExpanded}
      class:hidden-mode={isHidden}>
@@ -638,6 +644,7 @@ onDestroy(() => {
         </div>
     {/if}
 </div>
+{/if}
 
 <style>
 .orb-player {

@@ -14,6 +14,8 @@ interface Props {
 	category: string | null;
 	hideTagsForMobile?: boolean;
 	hideUpdateDate?: boolean;
+	/** card = 列表卡片里更紧凑的一档 */
+	size?: "default" | "card";
 }
 const {
 	published,
@@ -22,6 +24,7 @@ const {
 	category,
 	hideTagsForMobile = false,
 	hideUpdateDate = false,
+	size = "default",
 } = Astro.props;
 const className = Astro.props.class;
 const homePaths = ["/", ...Array.from({ length: 20 }, (_, i) => `/${i + 1}/`)];
@@ -30,132 +33,159 @@ const umamiShareId = profileConfig.umami?.shareId || "";
 const umamiRegion = profileConfig.umami?.region || "eu";
 ---
 
-<div class:list={["flex flex-wrap text-neutral-500 dark:text-neutral-400 items-center gap-4 gap-x-4 gap-y-2", className]}>
+<div class:list={["post-meta", { "post-meta--card": size === "card" }, className]}>
     <!-- publish date -->
-    <div class="flex items-center">
-        <div class="meta-icon"
-        >
-            <Icon name="material-symbols:calendar-today-outline-rounded" class="text-xl"></Icon>
-        </div>
-        <span class="text-50 text-sm font-medium">{formatDateToYYYYMMDD(published)}</span>
-    </div>
+    <span class="post-meta__chip">
+        <Icon name="material-symbols:calendar-today-outline-rounded" class="post-meta__icon"></Icon>
+        {formatDateToYYYYMMDD(published)}
+    </span>
 
     <!-- update date -->
     {!hideUpdateDate && updated && updated.getTime() !== published.getTime() && (
-        <div class="flex items-center">
-            <div class="meta-icon"
-            >
-                <Icon name="material-symbols:edit-calendar-outline-rounded" class="text-xl"></Icon>
-            </div>
-            <span class="text-50 text-sm font-medium">{formatDateToYYYYMMDD(updated)}</span>
-        </div>
+        <span class="post-meta__chip">
+            <Icon name="material-symbols:edit-calendar-outline-rounded" class="post-meta__icon"></Icon>
+            {formatDateToYYYYMMDD(updated)}
+        </span>
     )}
 
     <!-- categories -->
-    <div class="flex items-center">
-        <div class="meta-icon"
-        >
-            <Icon name="material-symbols:book-2-outline-rounded" class="text-xl"></Icon>
-        </div>
-        <div class="flex flex-row flex-nowrap items-center">
-            <a href={getCategoryUrl(category)} aria-label={`View all posts in the ${category} category`}
-               class="link-lg transition text-50 text-sm font-medium
-                            hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap">
-                {category || i18n(I18nKey.uncategorized)}
-            </a>
-        </div>
-    </div>
+    <a href={getCategoryUrl(category)}
+       aria-label={`View all posts in the ${category} category`}
+       class="post-meta__chip post-meta__chip--link">
+        <Icon name="material-symbols:book-2-outline-rounded" class="post-meta__icon"></Icon>
+        {category || i18n(I18nKey.uncategorized)}
+    </a>
 
     <!-- tags -->
-    <div class:list={["items-center", {"flex": !hideTagsForMobile, "hidden md:flex": hideTagsForMobile}]}>
-        <div class="meta-icon"
-        >
-            <Icon name="material-symbols:tag-rounded" class="text-xl"></Icon>
-        </div>
-        <div class="flex flex-row flex-nowrap items-center">
-            {(tags && tags.length > 0) && tags.map((tag, i) => (
-                <div class:list={[{"hidden": i == 0}, "mx-1.5 text-[var(--meta-divider)] text-sm"]}>/</div>
-                <a href={getTagUrl(tag)} aria-label={`View all posts with the ${tag.trim()} tag`}
-                   class="link-lg transition text-50 text-sm font-medium
-                                hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap">
-                    {tag.trim()}
+    <span class:list={["post-meta__tags", { "hidden md:inline-flex": hideTagsForMobile }]}>
+        {(tags && tags.length > 0)
+            ? tags.map((tag) => (
+                <a href={getTagUrl(tag)}
+                   aria-label={`View all posts with the ${tag.trim()} tag`}
+                   class="post-meta__chip post-meta__chip--tag">
+                    <span class="post-meta__hash">#</span>{tag.trim()}
                 </a>
-            ))}
-            {!(tags && tags.length > 0) && <div class="transition text-50 text-sm font-medium">{i18n(I18nKey.noTags)}</div>}
-        </div>
-    </div>
-        <!-- 访问量（首页不显示，且umami.enable为true时显示） -->
-        {!isHome && profileConfig.umami?.enable && (
-                <>
-                    <div class="flex items-center">
-                            <div class="meta-icon">
-                                    <Icon name="material-symbols:visibility-outline-rounded" class="text-xl"></Icon>
-                            </div>
-                            <span>浏览量：<span id="post-umami-pageviews">加载中...</span></span>，
-                            <span>访问次数：<span id="post-umami-visits">加载中...</span></span>
-                    </div>
+            ))
+            : <span class="post-meta__chip">{i18n(I18nKey.noTags)}</span>
+        }
+    </span>
 
-                    <script is:inline define:vars={{umamiShareId, umamiRegion}}>
-                        const fetchUmamiStats = async () => {
-                            try {
-                                const pathname = window.location.pathname;
-                                const shareId = umamiShareId;
-                                const region = umamiRegion;
-                                console.log('PostMeta shareId:', shareId, 'region:', region);
-                                console.log('PostMeta pathname:', pathname);
-                                
-                                const shareRes = await fetch(`https://${region}.umami.is/api/share/${shareId}`);
-                                console.log('PostMeta shareRes status:', shareRes.status);
-                                
-                                if (!shareRes.ok) {
-                                    throw new Error(`Share API failed: ${shareRes.status}`);
-                                }
-                                
-                                const shareData = await shareRes.json();
-                                console.log('PostMeta shareData:', shareData);
-                                const token = shareData.token;
-                                const websiteId = shareData.websiteId || shareData.website_id || shareData.id;
-                                console.log('PostMeta token:', token, 'websiteId:', websiteId);
-                                
-                                const url = `https://${region}.umami.is/api/websites/${websiteId}/stats?` +
-                                    new URLSearchParams({
-                                        startAt: '1753333200000',
-                                        endAt: Date.now(),
-                                        unit: 'hour',
-                                        timezone: 'Asia/Shanghai',
-                                        url: pathname,
-                                        compare: 'false',
-                                    });
-                                console.log('PostMeta statsUrl:', url);
-                                
-                                const res = await fetch(url, {
-                                    method: 'GET',
-                                    headers: {
-                                        'x-umami-share-token': token,
-                                    },
-                                });
-                                console.log('PostMeta stats res status:', res.status);
-                                
-                                const data = await res.json();
-                                console.log('PostMeta stats data:', data);
-                                
-                                if (res.ok) {
-                                    const pageviews = data?.pageviews?.value ?? 'N/A';
-                                    const visits = data?.visits?.value ?? 'N/A';
-                                    document.getElementById('post-umami-pageviews').textContent = pageviews;
-                                    document.getElementById('post-umami-visits').textContent = visits;
-                                } else {
-                                    document.getElementById('post-umami-pageviews').textContent = 'N/A';
-                                    document.getElementById('post-umami-visits').textContent = 'N/A';
-                                }
-                            } catch (error) {
-                                console.error('PostMeta Umami stats error:', error);
-                                document.getElementById('post-umami-pageviews').textContent = 'Error';
-                                document.getElementById('post-umami-visits').textContent = 'Error';
-                            }
-                        };
-                        fetchUmamiStats();
-                    </script>
-                </>
-        )}
+    <!-- 访问量（首页不显示，且umami.enable为true时显示） -->
+    {!isHome && profileConfig.umami?.enable && (
+        <>
+            <span class="post-meta__chip">
+                <Icon name="material-symbols:visibility-outline-rounded" class="post-meta__icon"></Icon>
+                <span id="post-umami-pageviews">…</span>
+            </span>
+
+            <script is:inline define:vars={{umamiShareId, umamiRegion}}>
+                const fetchUmamiStats = async () => {
+                    try {
+                        const pathname = window.location.pathname;
+                        const shareId = umamiShareId;
+                        const region = umamiRegion;
+
+                        const shareRes = await fetch(`https://${region}.umami.is/api/share/${shareId}`);
+                        if (!shareRes.ok) {
+                            throw new Error(`Share API failed: ${shareRes.status}`);
+                        }
+
+                        const shareData = await shareRes.json();
+                        const token = shareData.token;
+                        const websiteId = shareData.websiteId || shareData.website_id || shareData.id;
+
+                        const url = `https://${region}.umami.is/api/websites/${websiteId}/stats?` +
+                            new URLSearchParams({
+                                startAt: '1753333200000',
+                                endAt: Date.now(),
+                                unit: 'hour',
+                                timezone: 'Asia/Shanghai',
+                                url: pathname,
+                                compare: 'false',
+                            });
+
+                        const res = await fetch(url, {
+                            method: 'GET',
+                            headers: {
+                                'x-umami-share-token': token,
+                            },
+                        });
+
+                        const data = await res.json();
+
+                        if (res.ok) {
+                            document.getElementById('post-umami-pageviews').textContent = data?.pageviews?.value ?? 'N/A';
+                        } else {
+                            document.getElementById('post-umami-pageviews').textContent = 'N/A';
+                        }
+                    } catch (error) {
+                        console.error('PostMeta Umami stats error:', error);
+                        document.getElementById('post-umami-pageviews').textContent = 'Error';
+                    }
+                };
+                fetchUmamiStats();
+            </script>
+        </>
+    )}
 </div>
+
+<style>
+    .post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .post-meta__chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.22rem 0.55rem 0.22rem 0.4rem;
+        border-radius: 0.55rem;
+        font-size: 0.78rem;
+        font-weight: 500;
+        line-height: 1.35;
+        white-space: nowrap;
+        color: var(--content-meta);
+        background: oklch(0 0 0 / 0.035);
+        transition: color 0.2s ease, background-color 0.2s ease;
+    }
+
+    :global(.dark) .post-meta__chip {
+        background: oklch(1 0 0 / 0.055);
+    }
+
+    .post-meta__chip--link:hover,
+    .post-meta__chip--tag:hover {
+        color: var(--primary);
+        background: var(--primary-subtle);
+    }
+
+    .post-meta__icon {
+        font-size: 1rem;
+        opacity: 0.75;
+    }
+
+    .post-meta__tags {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .post-meta__hash {
+        color: var(--primary);
+        opacity: 0.75;
+        font-weight: 700;
+    }
+
+    .post-meta--card .post-meta__chip {
+        font-size: 0.75rem;
+        padding: 0.18rem 0.5rem 0.18rem 0.35rem;
+    }
+
+    .post-meta--card .post-meta__icon {
+        font-size: 0.95rem;
+    }
+</style>

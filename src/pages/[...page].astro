@@ -1,10 +1,16 @@
 ---
 import type { GetStaticPaths } from "astro";
+import { Icon } from "astro-icon/components";
 import Pagination from "../components/control/Pagination.astro";
+import FeaturedPost from "../components/FeaturedPost.astro";
+import HomeSpace from "../components/HomeSpace.astro";
 import PostPage from "../components/PostPage.astro";
 import { PAGE_SIZE } from "../constants/constants";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getSortedPosts } from "../utils/content-utils";
+import { url } from "../utils/url-utils";
 
 export const getStaticPaths = (async ({ paginate }) => {
 	const allBlogPosts = await getSortedPosts();
@@ -15,9 +21,101 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 
 const len = page.data.length;
+const isFirstPage = page.currentPage === 1;
+
+// 首页第一篇用大图卡片做视觉焦点，其余照常进入列表
+const featured = isFirstPage ? page.data[0] : undefined;
+const restPosts = featured ? page.data.slice(1) : page.data;
 ---
 
 <MainGridLayout>
-    <PostPage page={page}></PostPage>
-    <Pagination class="mx-auto onload-animation" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
+    {featured && (
+        <FeaturedPost
+            entry={featured}
+            class="mb-4"
+            style="animation-delay: calc(var(--content-delay) - 60ms);"
+        />
+    )}
+
+    {restPosts.length > 0 && (
+        <div class="section-heading onload-animation" style="animation-delay: calc(var(--content-delay) + 40ms);">
+            <div class="section-heading__bar"></div>
+            <h2 class="section-heading__title">{i18n(I18nKey.recentPosts)}</h2>
+            <span class="section-heading__count">{page.data.length}</span>
+            <a href={url('/archive/')} class="section-heading__more">
+                {i18n(I18nKey.viewAll)}
+                <Icon name="material-symbols:arrow-forward-rounded" class="text-[1.05rem]" />
+            </a>
+        </div>
+    )}
+
+    <PostPage posts={restPosts}></PostPage>
+
+    {isFirstPage && (
+        <HomeSpace
+            class="mt-4"
+            style="animation-delay: calc(var(--content-delay) + 120ms);"
+        />
+    )}
+
+    {page.lastPage > 1 && (
+        <Pagination class="mx-auto onload-animation mt-4" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
+    )}
 </MainGridLayout>
+
+<style>
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0 0.25rem 0.15rem;
+    }
+
+    .section-heading__bar {
+        width: 0.25rem;
+        height: 1.05rem;
+        border-radius: 999px;
+        background: linear-gradient(to bottom, var(--primary), oklch(0.7 0.14 calc(var(--hue) + 40)));
+    }
+
+    .section-heading__title {
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        color: var(--deep-text);
+    }
+
+    :global(.dark) .section-heading__title {
+        color: oklch(0.94 0.01 var(--hue));
+    }
+
+    .section-heading__count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.35rem;
+        height: 1.35rem;
+        padding: 0 0.35rem;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--primary);
+        background: var(--primary-subtle);
+    }
+
+    .section-heading__more {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.15rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--content-meta);
+        transition: color 0.2s ease, gap 0.2s ease;
+    }
+
+    .section-heading__more:hover {
+        color: var(--primary);
+        gap: 0.3rem;
+    }
+</style>
