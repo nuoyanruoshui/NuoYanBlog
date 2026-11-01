@@ -14,6 +14,8 @@
 - **GF Unity Excel Importer**：把上面这套适配到 GF 框架上
 - **Unity UI Manager**：一个简单好用的 UI 管理框架，负责面板的全局管理、动画和性能优化
 
+后来做得越来越杂：可视化行为树、对象池、脚本绑定、交互系统、对话系统、技能系统……这几年陆陆续续攒了十几个，都能在[项目页](/projects/)里翻到。最近在折腾的是用 Godot 重写一套 GameFramework。
+
 目前还在啃 Unity 的资源管理和热更新，[Addressables 那篇笔记](/posts/unityaddressable/addressable/)就是学习过程的产物。
 
 ## 这个站点是什么样的地方
