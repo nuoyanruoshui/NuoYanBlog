@@ -40,13 +40,14 @@ html {
  */
 :root {
     --page-bg-layers:
+        radial-gradient(circle, var(--bg-star) 1.3px, transparent 1.8px),
         radial-gradient(circle, var(--bg-dot) 1px, transparent 1.4px),
         radial-gradient(ellipse 58% 46% at 4% -6%, var(--aurora-a), transparent 68%),
         radial-gradient(ellipse 54% 40% at 98% 2%, var(--aurora-b), transparent 66%),
         radial-gradient(ellipse 85% 52% at 48% 114%, var(--aurora-c), transparent 70%),
         linear-gradient(to bottom, var(--bg-top-glow), transparent 34vh);
-    --page-bg-sizes: 26px 26px, 122% 104%, 118% 100%, 150% 120%, 100% 42vh;
-    --page-bg-positions: 0 0, left top, right top, center bottom, center top;
+    --page-bg-sizes: 97px 97px, 26px 26px, 122% 104%, 118% 100%, 150% 120%, 100% 42vh;
+    --page-bg-positions: 0 0, 0 0, left top, right top, center bottom, center top;
 }
 
 html {
@@ -62,7 +63,7 @@ html::before {
     background-image: var(--page-bg-layers);
     background-size: var(--page-bg-sizes);
     background-position: var(--page-bg-positions);
-    background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+    background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat;
     /* 提升为独立合成层，滚动时不再重绘 */
     transform: translateZ(0);
     will-change: transform;

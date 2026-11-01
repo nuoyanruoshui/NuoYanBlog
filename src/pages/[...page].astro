@@ -4,6 +4,7 @@ import { Icon } from "astro-icon/components";
 import Pagination from "../components/control/Pagination.astro";
 import FeaturedPost from "../components/FeaturedPost.astro";
 import HomeSpace from "../components/HomeSpace.astro";
+import HomeWelcome from "../components/HomeWelcome.astro";
 import PostPage from "../components/PostPage.astro";
 import { PAGE_SIZE } from "../constants/constants";
 import I18nKey from "../i18n/i18nKey";
@@ -29,6 +30,13 @@ const restPosts = featured ? page.data.slice(1) : page.data;
 ---
 
 <MainGridLayout>
+    {isFirstPage && (
+        <HomeWelcome
+            class="mb-4"
+            style="animation-delay: calc(var(--content-delay) - 100ms);"
+        />
+    )}
+
     {featured && (
         <FeaturedPost
             entry={featured}

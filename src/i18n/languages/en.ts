@@ -45,6 +45,7 @@ export const en: Translation = {
 	[Key.articles]: "Articles",
 	[Key.projectsShort]: "Projects",
 	[Key.skillsShort]: "Skills",
+	[Key.welcome]: "Welcome",
 
 	[Key.themeColor]: "Theme Color",
 

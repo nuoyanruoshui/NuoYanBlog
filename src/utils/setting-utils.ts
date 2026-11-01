@@ -2,6 +2,7 @@ import {
 	AUTO_MODE,
 	DARK_MODE,
 	DEFAULT_THEME,
+	HUE_STORAGE_KEY,
 	LIGHT_MODE,
 } from "@constants/constants";
 import { expressiveCodeConfig } from "@/config";
@@ -14,12 +15,12 @@ export function getDefaultHue(): number {
 }
 
 export function getHue(): number {
-	const stored = localStorage.getItem("hue");
+	const stored = localStorage.getItem(HUE_STORAGE_KEY);
 	return stored ? Number.parseInt(stored) : getDefaultHue();
 }
 
 export function setHue(hue: number): void {
-	localStorage.setItem("hue", String(hue));
+	localStorage.setItem(HUE_STORAGE_KEY, String(hue));
 	const r = document.querySelector(":root") as HTMLElement;
 	if (!r) {
 		return;

@@ -9,12 +9,17 @@ rainbow-light = linear-gradient(to right, oklch(0.80 0.10 0), oklch(0.80 0.10 30
 rainbow-dark = linear-gradient(to right, oklch(0.70 0.10 0), oklch(0.70 0.10 30), oklch(0.70 0.10 60), oklch(0.70 0.10 90), oklch(0.70 0.10 120), oklch(0.70 0.10 150), oklch(0.70 0.10 180), oklch(0.70 0.10 210), oklch(0.70 0.10 240), oklch(0.70 0.10 270), oklch(0.70 0.10 300), oklch(0.70 0.10 330), oklch(0.70 0.10 360))
 
 :root
-  --radius-large 1.25rem
-  --radius-small 0.6rem
+  --radius-large 1.35rem
+  --radius-small 0.7rem
   --content-delay 150ms
   /* 统一的缓动曲线：柔和收尾，避免默认 ease 的廉价感 */
   --ease-soft cubic-bezier(0.32, 0.72, 0, 1)
   --ease-out-soft cubic-bezier(0.22, 1, 0.36, 1)
+  /* 副色相：主题色的互补偏移，用做渐变另一端（粉 → 紫），比 +45° 的橙红更"二次元" */
+  --hue-2 calc(var(--hue) - 42)
+  /* 樱花粉：固定装饰色，不跟随主题色，保证换色后仍有一点樱花味 */
+  --sakura oklch(0.82 0.1 350)
+  --sakura-soft oklch(0.82 0.1 350 / 0.35)
 
 /* An util to define variables that vary with light and dark mode */
 define(vars)
@@ -35,7 +40,7 @@ define({
   --card-bg-transparent: rgba(255, 255, 255, 0.72) rgba(26, 26, 28, 0.72)
 
   /* 阴影体系：分层柔和投影 + 1px 内描边。全屏壁纸下描边保证卡片边界清晰，悬浮时描边过渡为主题色 */
-  --shadow-card: unquote("0 1px 2px oklch(0 0 0 / 0.04), 0 4px 12px -2px oklch(0 0 0 / 0.06), inset 0 0 0 1px oklch(0 0 0 / 0.045)") unquote("0 1px 2px oklch(0 0 0 / 0.35), 0 6px 18px -2px oklch(0 0 0 / 0.4), inset 0 1px 0 0 oklch(1 0 0 / 0.06), inset 0 0 0 1px oklch(1 0 0 / 0.075)")
+  --shadow-card: unquote("0 1px 2px oklch(0 0 0 / 0.04), 0 4px 12px -2px oklch(0 0 0 / 0.06), inset 0 0 0 1px oklch(0.7 0.14 var(--hue) / 0.1)") unquote("0 1px 2px oklch(0 0 0 / 0.35), 0 6px 18px -2px oklch(0 0 0 / 0.4), inset 0 1px 0 0 oklch(1 0 0 / 0.06), inset 0 0 0 1px oklch(0.78 0.14 var(--hue) / 0.16)")
   --shadow-card-hover: unquote("0 2px 6px oklch(0 0 0 / 0.06), 0 14px 32px -8px oklch(0 0 0 / 0.14), inset 0 0 0 1px oklch(0.70 0.14 var(--hue) / 0.22)") unquote("0 2px 6px oklch(0 0 0 / 0.40), 0 14px 32px -8px oklch(0 0 0 / 0.55), inset 0 0 0 1px oklch(0.75 0.14 var(--hue) / 0.35)")
   --shadow-float: unquote("0 4px 12px oklch(0 0 0 / 0.08), 0 16px 40px -12px oklch(0 0 0 / 0.18), inset 0 0 0 1px oklch(0 0 0 / 0.05)") unquote("0 4px 12px oklch(0 0 0 / 0.40), 0 16px 40px -12px oklch(0 0 0 / 0.60), inset 0 0 0 1px oklch(1 0 0 / 0.08)")
 
@@ -120,10 +125,12 @@ define({
 
   /* 背景装饰层（见 main.css 的 body::before）：
      一组跟随 --hue 漂移的极光色团 + 细点阵，构成有层次的页面底纹。 */
-  --aurora-a: unquote("oklch(0.88 0.085 calc(var(--hue) + 52) / 0.62)") unquote("oklch(0.48 0.115 calc(var(--hue) + 52) / 0.38)")
-  --aurora-b: unquote("oklch(0.90 0.065 calc(var(--hue) - 34) / 0.58)") unquote("oklch(0.44 0.095 calc(var(--hue) - 34) / 0.34)")
-  --aurora-c: unquote("oklch(0.93 0.045 calc(var(--hue) + 18) / 0.50)") unquote("oklch(0.40 0.060 calc(var(--hue) + 18) / 0.30)")
+  --aurora-a: unquote("oklch(0.88 0.085 var(--hue-2) / 0.55)") unquote("oklch(0.48 0.115 var(--hue-2) / 0.36)")
+  --aurora-b: unquote("oklch(0.90 0.075 calc(var(--hue) + 16) / 0.62)") unquote("oklch(0.44 0.105 calc(var(--hue) + 16) / 0.34)")
+  --aurora-c: unquote("oklch(0.93 0.05 calc(var(--hue) - 72) / 0.46)") unquote("oklch(0.40 0.07 calc(var(--hue) - 72) / 0.30)")
   --bg-dot: black(0.055) white(0.045)
+  /* 深色下额外一层稀疏"星点"，让夜空不那么平 */
+  --bg-star: unquote("oklch(0 0 0 / 0)") unquote("oklch(0.95 0.03 var(--hue) / 0.42)")
   --bg-top-glow: unquote("oklch(0.78 0.12 var(--hue) / 0.16)") unquote("oklch(0.62 0.16 var(--hue) / 0.22)")
 
   /* 卡片表面：一层极浅的斜向高光，让纯白/纯深灰不再死板 */

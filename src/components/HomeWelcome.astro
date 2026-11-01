@@ -1,0 +1,124 @@
+---
+import { siteConfig } from "../config";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import TypewriterText from "./TypewriterText.astro";
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+
+const className = Astro.props.class;
+const style = Astro.props.style;
+
+// 优先用 config 里写好的主页副标题，没有就退回站点副标题
+const rawSubtitles = siteConfig.banner?.homeText?.subtitle;
+const subtitles = (
+	Array.isArray(rawSubtitles) ? rawSubtitles : [rawSubtitles]
+).filter(
+	(line): line is string => typeof line === "string" && line.trim().length > 0,
+);
+
+const lines = subtitles.length > 0 ? subtitles : [siteConfig.subtitle];
+---
+
+<div class:list={["home-welcome onload-animation", className]} style={style}>
+    <span class="home-welcome__glow" aria-hidden="true"></span>
+
+    <span class="home-welcome__star" aria-hidden="true">✦</span>
+    <span class="home-welcome__label">{i18n(I18nKey.welcome)}</span>
+    <span class="home-welcome__sep" aria-hidden="true">·</span>
+
+    <span class="home-welcome__type">
+        <TypewriterText
+            text={lines}
+            speed={90}
+            deleteSpeed={40}
+            pauseTime={1800}
+            class="home-welcome__typer"
+        />
+    </span>
+
+    <span class="home-welcome__petals" aria-hidden="true">✿ ❀ ✿</span>
+</div>
+
+<style>
+    .home-welcome {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1.25rem;
+        border-radius: var(--radius-large);
+        overflow: hidden;
+        background-color: var(--card-bg);
+        background-image:
+            linear-gradient(100deg, oklch(0.72 0.16 var(--hue) / 0.12), oklch(0.72 0.14 var(--hue-2) / 0.1) 55%, transparent 85%),
+            var(--surface-sheen);
+        box-shadow: var(--shadow-card);
+    }
+
+    .home-welcome__glow {
+        position: absolute;
+        inset: -60% auto auto -10%;
+        width: 22rem;
+        height: 22rem;
+        border-radius: 999px;
+        background: radial-gradient(circle, oklch(0.8 0.16 var(--hue) / 0.22), transparent 65%);
+        pointer-events: none;
+    }
+
+    .home-welcome__star {
+        color: var(--primary);
+        font-size: 0.95rem;
+        animation: welcome-twinkle 3.2s ease-in-out infinite;
+    }
+
+    @keyframes welcome-twinkle {
+        0%, 100% { opacity: 0.55; transform: scale(0.92) rotate(0deg); }
+        50% { opacity: 1; transform: scale(1.08) rotate(18deg); }
+    }
+
+    .home-welcome__label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        color: var(--primary);
+    }
+
+    .home-welcome__sep {
+        color: var(--content-meta);
+        opacity: 0.5;
+    }
+
+    .home-welcome__type {
+        min-width: 0;
+        font-size: 0.92rem;
+        color: var(--deep-text);
+    }
+
+    :global(.dark) .home-welcome__type {
+        color: oklch(0.94 0.01 var(--hue));
+    }
+
+    .home-welcome__petals {
+        margin-left: auto;
+        font-size: 0.8rem;
+        letter-spacing: 0.25em;
+        color: var(--sakura);
+        opacity: 0.75;
+    }
+
+    @media (max-width: 640px) {
+        .home-welcome__petals {
+            display: none;
+        }
+
+        .home-welcome__type {
+            width: 100%;
+            padding-left: 1.4rem;
+        }
+    }
+</style>

@@ -44,6 +44,7 @@ export const zh_TW: Translation = {
 	[Key.articles]: "文章",
 	[Key.projectsShort]: "專案",
 	[Key.skillsShort]: "技能",
+	[Key.welcome]: "歡迎光臨",
 
 	[Key.themeColor]: "主題色",
 

@@ -27,7 +27,7 @@ export const siteConfig: SiteConfig = {
 	lang: SITE_LANG,
 
 	themeColor: {
-		hue: 210, // 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
+		hue: 340, // 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：340
 		fixed: false, // 对访问者隐藏主题色选择器
 	},
 
@@ -218,9 +218,8 @@ export const navBarConfig: NavBarConfig = {
 		},
 		{
 			name: "关于",
-			url: "/content/",
+			url: "/about/",
 			icon: "material-symbols:info",
-			children: [LinkPreset.About, LinkPreset.Friends],
 		},
 		{
 			name: "其他",
@@ -439,12 +438,12 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 };
 
 export const sakuraConfig: SakuraConfig = {
-	enable: true, // 默认关闭樱花特效
-	sakuraNum: 5, // 樱花数量
+	enable: true, // 樱花特效开关
+	sakuraNum: 12, // 樱花数量（太少会显得没有；太多会挡内容）
 	limitTimes: -1, // 樱花越界限制次数，-1为无限循环
 	size: {
-		min: 0.5, // 樱花最小尺寸倍数
-		max: 1.1, // 樱花最大尺寸倍数
+		min: 0.55, // 樱花最小尺寸倍数
+		max: 1.25, // 樱花最大尺寸倍数
 	},
 	speed: {
 		horizontal: {

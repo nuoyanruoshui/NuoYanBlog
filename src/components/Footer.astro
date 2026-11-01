@@ -32,7 +32,6 @@ const quickLinks = [
 	LinkPresets[LinkPreset.Home],
 	LinkPresets[LinkPreset.Archive],
 	LinkPresets[LinkPreset.About],
-	LinkPresets[LinkPreset.Friends],
 	LinkPresets[LinkPreset.Projects],
 	LinkPresets[LinkPreset.Skills],
 ];
@@ -83,6 +82,7 @@ const quickLinks = [
             <a class="site-footer__meta-link" target="_blank" href="https://astro.build">Astro</a>
             &
             <a class="site-footer__meta-link" target="_blank" href="https://github.com/matsuzaka-yuki/mizuki">Mizuki</a>
+            <span class="site-footer__heart" aria-label="love">♥</span>
         </span>
     </div>
 </div>
@@ -223,6 +223,18 @@ const quickLinks = [
     .site-footer__custom {
         width: 100%;
         margin-bottom: 0.3rem;
+    }
+
+    .site-footer__heart {
+        display: inline-block;
+        margin-left: 0.3rem;
+        color: var(--sakura);
+        animation: footer-heart-beat 2.6s ease-in-out infinite;
+    }
+
+    @keyframes footer-heart-beat {
+        0%, 100% { opacity: 0.65; transform: scale(1); }
+        45% { opacity: 1; transform: scale(1.12); }
     }
 
     .site-footer__powered {

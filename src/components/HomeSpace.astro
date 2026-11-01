@@ -172,7 +172,9 @@ const tiles = [
         padding: 0.85rem 1rem;
         border-radius: var(--radius-large);
         background-color: var(--card-bg);
-        background-image: var(--surface-sheen);
+        background-image:
+            var(--surface-sheen),
+            linear-gradient(155deg, color-mix(in oklab, var(--tile-accent) 10%, transparent), transparent 62%);
         box-shadow: var(--shadow-card);
         overflow: hidden;
         transition: box-shadow 0.35s var(--ease-soft), transform 0.35s var(--ease-soft);
@@ -181,6 +183,9 @@ const tiles = [
     .space-tile:hover {
         transform: translateY(-2px);
         box-shadow: var(--shadow-card-hover);
+        background-image:
+            var(--surface-sheen),
+            linear-gradient(155deg, color-mix(in oklab, var(--tile-accent) 16%, transparent), transparent 66%);
     }
 
     .space-tile__icon {
