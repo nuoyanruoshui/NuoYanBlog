@@ -6,6 +6,7 @@ tags: [GitHub, Unity, AI]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/UnityBehaviourTree"
+image: "/images/covers/unitybehaviourtree.png"
 draft: false
 ---
 

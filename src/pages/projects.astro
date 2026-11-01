@@ -13,6 +13,28 @@ import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 
+// 项目 id -> 已发布文章的 slug（没有写文章的项目不在这里，卡片上就不显示入口）
+const projectPostMap: Record<string, string> = {
+	"Unity Excel Importer": "unity-excel-importer",
+	Layout: "unitygameobjectlayoutgroup",
+	RecyclerView: "virtualscroll",
+	"easy-save": "unityarchivesystem",
+	"godot-game-framework": "godotgameframework",
+	"unity-behaviour-tree": "unitybehaviourtree",
+	"unity-gameobject-pool": "unitygameobjectpool",
+	"unity-extension": "unityextension",
+	"unity-script-binder": "unityscriptbinder",
+	"unity-interactive": "unityinteractive",
+	"dialogue-system-so": "dialoguesystem_so",
+	"timeline-system": "timelinesystem",
+};
+
+const postHrefFor = (projectId: string) => {
+	const slug = projectPostMap[projectId];
+	if (!slug) return null;
+	return `${import.meta.env.BASE_URL.replace(/\/$/, "")}/posts/${slug}/`;
+};
+
 const { lang } = Astro.props;
 
 // 获取项目统计信息
@@ -131,21 +153,31 @@ const getCategoryText = (category: string) => {
                       </span>
                     )}
                   </div>
-                  <div class="flex gap-3">
-                    {project.demoUrl && (
-                      <a 
-                        href={project.demoUrl} 
-                        target="_blank" 
+                  <div class="flex flex-wrap items-center gap-3">
+                    {postHrefFor(project.id) && (
+                      <a
+                        href={postHrefFor(project.id)}
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm font-medium
+                        text-[var(--accent-purple)] bg-[var(--accent-purple-bg)] hover:brightness-95 transition"
+                      >
+                        <span aria-hidden="true">📝</span>
+                        {i18n(I18nKey.projectPost)}
+                      </a>
+                    )}
+                    {project.liveDemo && (
+                      <a
+                        href={project.liveDemo}
+                        target="_blank"
                         rel="noopener noreferrer"
                         class="text-[var(--accent-blue)] hover:underline text-sm font-medium"
                       >
                         {i18n(I18nKey.projectsDemo)}
                       </a>
                     )}
-                    {project.sourceUrl && (
-                      <a 
-                        href={project.sourceUrl} 
-                        target="_blank" 
+                    {project.sourceCode && (
+                      <a
+                        href={project.sourceCode}
+                        target="_blank"
                         rel="noopener noreferrer"
                         class="text-50 hover:underline text-sm font-medium"
                       >
@@ -218,21 +250,31 @@ const getCategoryText = (category: string) => {
                           </span>
                         )}
                       </div>
-                      <div class="flex gap-3 text-sm">
-                        {project.demoUrl && (
-                          <a 
-                            href={project.demoUrl} 
-                            target="_blank" 
+                      <div class="flex flex-wrap items-center gap-2.5 text-sm">
+                        {postHrefFor(project.id) && (
+                          <a
+                            href={postHrefFor(project.id)}
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium
+                            text-[var(--accent-purple)] bg-[var(--accent-purple-bg)] hover:brightness-95 transition"
+                          >
+                            <span aria-hidden="true">📝</span>
+                            {i18n(I18nKey.projectPost)}
+                          </a>
+                        )}
+                        {project.liveDemo && (
+                          <a
+                            href={project.liveDemo}
+                            target="_blank"
                             rel="noopener noreferrer"
                             class="text-[var(--accent-blue)] hover:underline font-medium"
                           >
                             {i18n(I18nKey.projectsDemo)}
                           </a>
                         )}
-                        {project.sourceUrl && (
-                          <a 
-                            href={project.sourceUrl} 
-                            target="_blank" 
+                        {project.sourceCode && (
+                          <a
+                            href={project.sourceCode}
+                            target="_blank"
                             rel="noopener noreferrer"
                             class="text-50 hover:underline font-medium"
                           >

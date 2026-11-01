@@ -42,6 +42,7 @@ enum I18nKey {
 	projectsShort = "projectsShort",
 	skillsShort = "skillsShort",
 	welcome = "welcome",
+	projectPost = "projectPost",
 
 	themeColor = "themeColor",
 

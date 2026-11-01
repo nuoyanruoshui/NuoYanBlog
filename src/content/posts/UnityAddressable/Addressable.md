@@ -1,7 +1,7 @@
 ---
 title: Addressables -可寻址资源管理系统（从引入到实现热更）
 published: 2024-03-09
-pinned: true
+pinned: false
 description: Unity的可寻址资源管理系统的使用.
 tags: [Unity, Assets, C#]
 category: Unity

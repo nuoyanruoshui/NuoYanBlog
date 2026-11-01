@@ -46,6 +46,7 @@ export const ja: Translation = {
 	[Key.projectsShort]: "プロジェクト",
 	[Key.skillsShort]: "スキル",
 	[Key.welcome]: "ようこそ",
+	[Key.projectPost]: "記事を読む",
 
 	[Key.themeColor]: "テーマカラー",
 
