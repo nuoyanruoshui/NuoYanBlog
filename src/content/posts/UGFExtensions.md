@@ -1,7 +1,7 @@
 ---
 title: "UGFExtensions：GameFramework 的一批扩展"
 published: 2026-06-08
-description: "数据表、Await/Async、定时器、时间轮、Version 生成、SpriteCollection、Texture 等扩展合集。"
+description: "给 UnityGameFramework 补的十来个小模块：数据表、Await、定时器、时间轮、图集、VFS 合并……"
 tags: [GitHub, Unity, 框架]
 category: Unity
 author: NuoYan
@@ -11,44 +11,32 @@ draft: false
 
 > 仓库地址：[nuoyanruoshui/UGFExtensions](https://github.com/nuoyanruoshui/UGFExtensions)
 
-一些对UnityGameFramework的扩展
+## 背景
 
-## 1.[数据表扩展](https://github.com/nuoyanruoshui/UGFExtensions/blob/main/Assets/Extensions/DataTableExtension)  
+[GameFramework](https://github.com/EllanJiang/GameFramework)（UGF）是一套很完整的 Unity 游戏框架，模块划分清楚、代码质量高。但它更像是"骨架"——真正做项目时，总有一堆细节要自己补：表怎么读、异步怎么写、定时怎么排、图集怎么收集。
 
-## 2.[Await/Async扩展](https://github.com/nuoyanruoshui/UGFExtensions/blob/main/Assets/Extensions/AwaitExtension)
+这个仓库就是这些年补下来的零碎，一个模块一个文件夹，**按需拷贝**，不要求全用。
 
-## 3.[Starforce中的扩展](https://github.com/nuoyanruoshui/UGFExtensions/blob/main/Assets/Extensions/StarforceExtension)
+## 模块清单
 
-## 4.[定时器扩展](https://github.com/nuoyanruoshui/UGFExtensions/blob/main/Assets/Extensions/TimerExtension)
+| 模块 | 做什么 |
+|---|---|
+| DataTableExtension | 数据表的读取与编辑器支持 |
+| AwaitExtension | 把 UGF 的回调式 API 包成 `await` 写法 |
+| EditorExtension | 编辑器侧的通用扩展 |
+| TimerExtension | 定时器组件的封装 |
+| TimingWheel | 时间轮组件，适合大量定时任务的场景 |
+| BuildExtension | 构建时自动生成版本号 |
+| SpriteCollectionExtension | 图集收集相关的编辑器扩展 |
+| TextureExtension | 贴图相关的扩展方法 |
+| MergeFileToVFSExtension | 把散落的小文件合并进虚拟文件系统（VFS），减少包内文件数 |
+| ResourceRuleExtension | 资源收集规则编辑器 |
+| ReferenceBindTool | 引用绑定工具（独立仓库） |
 
-## 5.[Version生成扩展](https://github.com/nuoyanruoshui/UGFExtensions/blob/main/Assets/Extensions/BuildExtension)
+另外根目录还有个 `Common` 放公共代码。
 
-## 6.[ResourceRule扩展](https://github.com/northWolf/GameFramework.ResourceRuleEditor)
+每个模块一个文件夹（`Assets/Extensions/<模块名>`），用哪个拷哪个，不会互相牵连。
 
-## 7.[SpriteCollection扩展](https://github.com/nuoyanruoshui/UGFExtensions/blob/main/Assets/Extensions/SpriteCollectionExtension)
+## 致谢
 
-## 8.[TextureExtension](https://github.com/nuoyanruoshui/UGFExtensions/blob/main/Assets/Extensions/TextureExtension)
-
-## 9.[时间轮组件](https://github.com/nuoyanruoshui/UGFExtensions/blob/main/Assets/Extensions/TimingWheel)
-
-## 10.[MergeFileToVFS](https://github.com/nuoyanruoshui/UGFExtensions/blob/main/Assets/Extensions/MergeFileToVFSExtension)
-
-## 11.[引用绑定工具 ReferenceBindTool](https://github.com/FingerCaster/ReferenceBindTool)
-
-# 引用库 致谢
-
-[GameFramework](https://github.com/EllanJiang/GameFramework)
-
-[UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
-
-[ET](https://github.com/egametang/ET)
-
-[DataTableEditor](https://github.com/shaun-he/DataTableEditor)
-
-[StarForce](https://github.com/EllanJiang/StarForce)
-
-[GameFramework.ResourceRuleEditor](https://github.com/northWolf/GameFramework.ResourceRuleEditor)
-
-[Unity-SerializableDictionary](https://github.com/azixMcAze/Unity-SerializableDictionary)
-
-[UnityEditorJunkie](https://github.com/roboryantron/UnityEditorJunkie)
+站在这些轮子上：GameFramework、UnityGameFramework、StarForce、ET、DataTableEditor、Unity-SerializableDictionary、UnityEditorJunkie 等。
