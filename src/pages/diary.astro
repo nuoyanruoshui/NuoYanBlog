@@ -1,4 +1,5 @@
 ---
+import fishAvatar from "../assets/images/dafatfish.png";
 import PageHeader from "../components/PageHeader.astro";
 import { moments } from "../data/moments";
 import I18nKey from "../i18n/i18nKey";
@@ -46,10 +47,25 @@ function formatTime(dateString: string): string {
 				<!-- 短文列表 -->
 				<div class="moments-timeline">
 					<div class="timeline-list space-y-4">
-					{moments.map(moment => (
+					{moments.map(moment => {
+						const isSiteDiary = moment.content.startsWith("【站点日记】");
+						const body = isSiteDiary ? moment.content.replace("【站点日记】", "").trim() : moment.content;
+						return (
 						<div class="moment-item card-base p-4 md:p-6 lg:p-8 hover:shadow-lg transition-all">
+								{isSiteDiary && (
+									<div class="flex items-center gap-2 mb-2 md:mb-3">
+										<img
+											src={fishAvatar.src}
+											alt="大肥鱼"
+											class="w-6 h-6 md:w-7 md:h-7 rounded-full bg-white/70 ring-1 ring-[var(--line-divider)] p-0.5"
+											loading="lazy"
+										/>
+										<span class="text-xs md:text-sm font-semibold text-[var(--primary)]">大肥鱼</span>
+										<span class="text-xs md:text-sm text-50">站点值守记录</span>
+									</div>
+								)}
 								<div class="moment-content">
-									<p class="moment-text text-sm md:text-base lg:text-lg text-90 leading-relaxed mb-3 md:mb-4">{moment.content}</p>
+									<p class="moment-text text-sm md:text-base lg:text-lg text-90 leading-relaxed mb-3 md:mb-4">{body}</p>
 									
 									{moment.images && moment.images.length > 0 && (
 				<div class="moment-images grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4 mb-3 md:mb-4">
@@ -79,7 +95,8 @@ function formatTime(dateString: string): string {
 									
 								</div>
 							</div>
-						))}
+						);
+					})}
 					</div>
 				</div>
 
