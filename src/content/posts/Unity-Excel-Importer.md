@@ -6,6 +6,7 @@ tags: [GitHub, Unity, 工具]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/Unity-Excel-Importer"
+image: "/images/covers/unity-excel-importer.webp"
 draft: false
 ---
 

@@ -6,6 +6,7 @@ tags: [GitHub, Unity, UI]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/UnityDropdown"
+image: "/images/covers/unitydropdown.webp"
 draft: false
 ---
 

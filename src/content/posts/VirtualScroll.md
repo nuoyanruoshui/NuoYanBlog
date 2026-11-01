@@ -6,6 +6,7 @@ tags: [GitHub, Unity, UI]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/VirtualScroll"
+image: "/images/covers/virtualscroll.webp"
 draft: false
 ---
 

@@ -6,6 +6,7 @@ tags: [GitHub, Unity, 剧情]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/DialogueSystem_SO"
+image: "/images/covers/dialoguesystem_so.webp"
 draft: false
 ---
 

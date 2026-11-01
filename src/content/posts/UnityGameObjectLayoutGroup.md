@@ -6,6 +6,7 @@ tags: [GitHub, Unity, UI]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/UnityGameObjectLayoutGroup"
+image: "/images/covers/unitygameobjectlayoutgroup.webp"
 draft: false
 ---
 

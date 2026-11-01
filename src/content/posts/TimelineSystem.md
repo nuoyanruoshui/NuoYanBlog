@@ -6,6 +6,7 @@ tags: [GitHub, Unity, 战斗]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/TimelineSystem"
+image: "/images/covers/timelinesystem.webp"
 draft: false
 ---
 

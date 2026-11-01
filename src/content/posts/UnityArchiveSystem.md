@@ -6,6 +6,7 @@ tags: [GitHub, Unity, 存档]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/UnityArchiveSystem"
+image: "/images/covers/unityarchivesystem.webp"
 draft: false
 ---
 

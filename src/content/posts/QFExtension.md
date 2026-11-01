@@ -6,6 +6,7 @@ tags: [GitHub, Unity, 框架]
 category: Unity
 author: NuoYan
 sourceLink: "https://github.com/nuoyanruoshui/QFExtension"
+image: "/images/covers/qfextension.webp"
 draft: false
 ---
 
