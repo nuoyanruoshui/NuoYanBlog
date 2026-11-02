@@ -247,7 +247,7 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/waguri.png", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
+	avatar: "assets/images/waguri.webp", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "诺言若水",
 	bio: "一人一心一旧城，旧街旧巷等旧人。",
 	links: [
