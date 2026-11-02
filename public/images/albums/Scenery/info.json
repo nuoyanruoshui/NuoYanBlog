@@ -1,0 +1,14 @@
+{
+    "title":  "夜色与风景",
+    "tags":  [
+                 "风景",
+                 "插画",
+                 "每日一图"
+             ],
+    "location":  "safebooru",
+    "description":  "每天从网上收几张喜欢的风景插画。图片来自 safebooru（SFW），版权归原作者，仅作个人收藏。",
+    "layout":  "masonry",
+    "hidden":  false,
+    "columns":  3,
+    "date":  "2026-11-02"
+}
