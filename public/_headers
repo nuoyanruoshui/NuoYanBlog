@@ -1,0 +1,13 @@
+# Cloudflare Pages 的缓存头（Netlify 用 netlify.toml，两边都放着互不影响）
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/pagefind/*
+  Cache-Control: public, max-age=604800
+
+/images/*
+  Cache-Control: public, max-age=604800
+
+/assets/*
+  Cache-Control: public, max-age=604800

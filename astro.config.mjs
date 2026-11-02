@@ -27,7 +27,8 @@ import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 // https://astro.build/config
 export default defineConfig({
-	site: "https://nuoyan.netlify.app/",
+	// 换域名/换托管时不用改代码：在平台的环境变量里设 SITE_URL 即可（RSS、sitemap、OG 都跟着走）
+	site: process.env.SITE_URL || "https://nuoyan.netlify.app/",
 
 	base: "/",
 	trailingSlash: "always",
